@@ -16,6 +16,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    #[
+        ORM\Column(type: 'datetime'),
+    ]
+    private \DateTimeInterface $createdAt;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
+
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $email;
 
@@ -28,6 +36,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCreatedAt(): \DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdateAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdateAt(?\DateTimeInterface $updateAt): self
+    {
+        $this->updatedAt = $updateAt;
+
+        return $this;
+    }
+
+    public function hasBeenUpdated(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getEmail(): ?string
