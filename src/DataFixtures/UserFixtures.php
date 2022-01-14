@@ -5,22 +5,36 @@ declare(strict_types=1);
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
     public const DEFAULT_EMAIL = 'admin@admin.com';
     public const DEFAULT_PASSWORD = 'admin';
 
+    private $hasher;
+
+    public function __construct(
+        UserPasswordHasherInterface $hasher
+    ) {
+        $this->hasher = $hasher;
+
+    }
+
     public function load(ObjectManager $manager): void
     {
         $defaultUser = new User();
 
+        $password = $this->hasher->hashPassword($defaultUser, self::DEFAULT_PASSWORD);
         $defaultUser
             ->setEmail(self::DEFAULT_EMAIL)
-            ->setPassword(self::DEFAULT_PASSWORD);
+            ->setPassword($password)
+            ->setCreatedAt(new DateTimeImmutable())
+            ->setUpdateAt(new DateTimeImmutable());
 
         $manager->persist($defaultUser);
         
@@ -33,7 +47,10 @@ class UserFixtures extends Fixture
 
             $user
                 ->setEmail($faker->email())
-                ->setPassword($password);
+                ->setPassword($password)
+                ->setCreatedAt(new DateTimeImmutable())
+                ->setUpdateAt(new DateTimeImmutable());
+                
             
             $manager->persist($user);
         }
