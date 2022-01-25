@@ -1,8 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
-namespace App\Tests\Functional;
+namespace Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +15,7 @@ abstract class AbstractEndPoint extends WebTestCase
 
         $client->request(
             $method,
-            $uri.'.json',
+            $uri,
             [],
             [],
             self::SERVER_INFORMATIONS,
