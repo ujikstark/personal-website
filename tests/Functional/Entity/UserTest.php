@@ -13,6 +13,7 @@ class UserTest extends AbstractEndPoint
 
     public function testGetUsers(): void
     {
+
         $response = $this->getResponseFromRequest(
             Request::METHOD_GET,
             self::USERS_URI,
@@ -23,7 +24,7 @@ class UserTest extends AbstractEndPoint
 
         $content = $response->getContent();
         $contentDecoded = json_decode($content, true);
-
+        
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertJson($content);
         $this->assertNotEmpty($contentDecoded);
