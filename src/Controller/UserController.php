@@ -11,18 +11,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserController extends AbstractController
 {
-
 
     public function __construct(
         private ValidatorInterface $validator,
         private UserPasswordHasherInterface $hasher,
         private UserRepository $userRepository)
     {
-        
+        $this->validator = Validation::createValidator();
     }
 
     #[Route('/users', name: 'user', methods: [Request::METHOD_GET])]
@@ -44,14 +44,22 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/users/new', name: 'users_create', methods: [Request::METHOD_POST])]
-    public function create(CreateUserDTO $data): JsonResponse
-    {
+    #[Route('/users', name: 'users_create', methods: [Request::METHOD_POST])]
+    public function create(Request $request, CreateUserDTO $data): JsonResponse
+    {   
         
+        $request = json_decode($request, true);
+        $data->setEmail($request['email']);
+        $data->setName($request['name']);
+        $data->setPassword($request['password']);
+
         if (count($errors = $this->validator->validate($data)) > 0) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
+        
         }
+    
 
+    
         $user = $this->userRepository->findOneBy([
             'email' => $data->getEmail()
         ]);
