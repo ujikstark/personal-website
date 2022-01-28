@@ -48,13 +48,19 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
-        }
+            "App\\": "src/App",
+            "Domain\\": "src/Domain",
+            "Model\\": "src/Model"
+        },
+        "classmap": [
+            "src/Kernel.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
         }
+
     },
     "replace": {
         "symfony/polyfill-ctype": "*",
