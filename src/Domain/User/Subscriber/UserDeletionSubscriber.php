@@ -2,41 +2,40 @@
 
 declare(strict_types=1);
 
-namespace Domain\User\Subscriber;
-
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\User;
+use App\Security\UserAuthorizationChecker;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserCreationSubscriber implements EventSubscriberInterface
+class UserDeletionSubscriber implements EventSubscriberInterface
 {
-
     public function __construct(
-        private UserPasswordHasherInterface $hasher
+        private UserAuthorizationChecker $userAuthorizationChecker
     ) {
+        
     }
 
     /**
-     * @return array<array>
+     * @@return array<array>
      */
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::VIEW => ['encodePassword', EventPriorities::PRE_WRITE]
-        ];        
+            KernelEvents::VIEW => ['check', EventPriorities::PRE_VALIDATE],
+        ];
     }
-
-    public function encodePassword(ViewEvent $event)
+    
+    public function check(ViewEvent $event): void
     {
         $user = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
-
-        if ($user instanceof User && Request::METHOD_POST === $method) {
-            $user->setPassword($this->hasher->hashPassword($user, $user->getPassword()));
+        
+        if ($user instanceof User && Request::METHOD_DELETE === $method) {
+            $this->userAuthorizationChecker->check($user);
         }
     }
+
 }
