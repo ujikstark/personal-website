@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Domain\User\Subscriber;
+
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\User;
 use App\Security\UserAuthorizationChecker;
