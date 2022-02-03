@@ -14,7 +14,7 @@ class UserTest extends AbstractEndPoint
     private const USERS_URI = '/api/users';
 
     public function testGetUsers(): void
-    {
+    {       
 
         $response = $this->getResponseFromRequest(
             Request::METHOD_GET,
