@@ -46,4 +46,32 @@ class UserTest extends TestCase
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals($password, $this->testedObject->getPassword());
     }
+
+    public function testGetUpdateAt(): void
+    {
+        $updateAt = new \DateTimeImmutable();
+
+        $user = $this->testedObject->setUpdateAt($updateAt);
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($updateAt, $user->getUpdateAt());
+    }
+
+    public function testGetName(): void
+    {
+        $name = 'john';
+
+        $user = $this->testedObject->setName($name);
+        
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($name, $user->getName());
+    }
+
+    public function testHasBeenUpdated(): void
+    {
+        $now = new \DateTimeImmutable();
+        $this->testedObject->hasBeenUpdated();
+
+        $this->assertEquals($now->format('d/m/Y H:i'), $this->testedObject->getUpdateAt()->format('d/m/Y H:i'));
+    }
 }

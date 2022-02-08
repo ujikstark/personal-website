@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Model\User\CreateUserDTO;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -45,7 +46,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[
         ORM\Id,
-        ORM\GeneratedValue,
         ORM\Column(type: 'uuid'),
         Serializer\Groups(groups: [
             'get_users',
@@ -77,6 +77,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string')]
     private $password;
+        
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Todo::class, orphanRemoval: true)]
+    private Collection $todos;
 
     public function __construct()
     {
@@ -89,6 +92,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
+    //For tests purposes
+     public function setId(Uuid $id): void
+    {
+        $this->id = $id;
+    }
 
     public function getCreatedAt(): \DateTimeInterface
     {
@@ -214,5 +222,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+     /**
+     * @return Collection<int, Todo>
+     */
+    public function getTodos(): Collection
+    {
+        return $this->todos;
+    }
+
+    public function addTodo(Todo $todo): self
+    {
+        if (!$this->todos->contains($todo)) {
+            $this->todos[] = $todo;
+            $todo->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTodo(Todo $todo): self
+    {
+        if ($this->todos->contains($todo)) {
+            $this->todos->removeElement($todo);
+        }
+
+        return $this;
     }
 }
