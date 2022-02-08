@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Model\User\CreateUserDTO;
@@ -85,6 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->id = Uuid::v4();
+        $this->todos = new ArrayCollection();
     }
 
     public function getId(): Uuid

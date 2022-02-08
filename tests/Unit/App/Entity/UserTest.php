@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Entity;
+namespace Tests\Unit\App\Entity;
 
+use App\Entity\Todo;
 use App\Entity\User;
 use PHPUnit\Framework\TestCase;
 
@@ -73,5 +74,32 @@ class UserTest extends TestCase
         $this->testedObject->hasBeenUpdated();
 
         $this->assertEquals($now->format('d/m/Y H:i'), $this->testedObject->getUpdateAt()->format('d/m/Y H:i'));
+    }
+
+    public function testAddTodo(): void
+    {
+        $todo = new Todo();
+
+        $user = $this->testedObject->addTodo($todo);
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertContains($todo, $user->getTodos());
+    }
+
+    public function testRemoveTodo(): void
+    {
+        $todo = new Todo();
+        $user = $this->testedObject
+            ->addTodo($todo)
+            ->removeTodo($todo)
+        ;
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertNotContains($todo, $user->getTodos());
+    }
+
+    public function testEraseCredentials(): void
+    {
+        $this->assertNull($this->testedObject->eraseCredentials());
     }
 }
