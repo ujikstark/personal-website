@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Action\NotFoundAction;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\TodoRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,6 +13,23 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 #[
     ORM\Entity(repositoryClass: TodoRepository::class),
     ApiResource(
+        collectionOperations: [
+            'get' => [
+                'normalization_context' => [
+                    'groups' => ['get_todos'],
+                ],
+            ],
+            'post',
+        ],
+        itemOperations: [
+            'delete',
+            'put',
+            'get' => [
+                'controller' => NotFoundAction::class,
+                'read' => false,
+                'output' => false,
+            ],
+        ],
         formats: ['json']
     )
 ]
