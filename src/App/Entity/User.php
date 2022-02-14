@@ -9,7 +9,10 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use GetMeController;
 use Model\User\CreateUserDTO;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -19,9 +22,8 @@ use Symfony\Component\Uid\Uuid;
     ORM\Entity(repositoryClass: UserRepository::class),
     ORM\Table(name: '`user`'),
     ApiResource(
-        normalizationContext: ['groups' => ['get_users']],
+        // normalizationContext: ['groups' => ['get_users']],
    
-
         collectionOperations: [
             'get' => [
                 'normalization_context' => [
@@ -37,7 +39,31 @@ use Symfony\Component\Uid\Uuid;
         ],
         itemOperations: [
             'get',
-            'delete'
+            'delete',
+            'getMe' => [
+                'method' => Request::METHOD_GET,
+                'normalization_context' => [
+                    'groups' => ['get_me'],
+                ],
+                'path' => GetMeController::PATH,
+                'identifiers' => [],
+                'controller' => GetMeController::class,
+                'read' => false,
+                'openapi_context' => [
+                    'tags' => ['Account'],
+                    'summary' => 'Retrieves current user resource.',
+                    'description' => 'Retrieves current user resource.',
+                    'parameters' => [],
+                    'responses' => [
+                        Response::HTTP_UNAUTHORIZED => [
+                            'description' => 'Unauthenticated user',
+                            'content' => [
+                                'application/json' => [],
+                            ],
+                        ],
+                    ]
+                ]
+            ]
         ],
         formats: ['json']
     )
@@ -50,14 +76,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         ORM\Column(type: 'uuid'),
         Serializer\Groups(groups: [
             'get_users',
-            'get_user'
+            'get_user',
+            'get_me',
         ])
     ]
     private Uuid $id;
 
     #[
         ORM\Column(type: 'datetime'),
-        Serializer\Groups(groups: ['get_user'])    
+        Serializer\Groups(groups: ['get_me', 'get_user'])    
     ]
     private \DateTimeInterface $createdAt;
 
@@ -66,11 +93,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[
         ORM\Column(type: 'string', length: 100),
-        Serializer\Groups(groups: ['get_user'])
+        Serializer\Groups(groups: ['get_me', 'get_user'])
     ]
     private $name;
 
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[
+        ORM\Column(type: 'string', length: 180, unique: true),
+        Serializer\Groups(groups: ['get_me'])
+    ]
     private $email;
 
     #[ORM\Column(type: 'json')]
