@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace App\Controller\Account;
+
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 

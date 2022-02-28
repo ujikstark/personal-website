@@ -6,6 +6,7 @@ use ApiPlatform\Core\Action\NotFoundAction;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\TodoRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Model\Todo\PersistTodoDTO;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -19,7 +20,12 @@ use Symfony\Component\Serializer\Annotation as Serializer;
                     'groups' => ['get_todos'],
                 ],
             ],
-            'post',
+            'post' => [
+                'input' => PersistTodoDTO::class,
+                'normalization_context' => [
+                    'groups' => ['persist_todo'],
+                ],
+            ],
         ],
         itemOperations: [
             'delete',

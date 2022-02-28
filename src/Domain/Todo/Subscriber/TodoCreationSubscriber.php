@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Domain\Todo\Subscriber;
+
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Todo;
 use App\Entity\User;
