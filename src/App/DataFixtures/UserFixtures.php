@@ -35,6 +35,7 @@ class UserFixtures extends Fixture
         $password = $this->hasher->hashPassword($defaultUser, self::DEFAULT_PASSWORD);
         $defaultUser
             ->setEmail(self::DEFAULT_EMAIL)
+            ->setName(self::DEFAULT_NAME)
             ->setPassword($password)
             ->setCreatedAt(new DateTimeImmutable())
             ->setUpdateAt(new DateTimeImmutable())
@@ -51,6 +52,7 @@ class UserFixtures extends Fixture
 
             $user
                 ->setEmail($faker->email())
+                ->setName($faker->name())
                 ->setPassword($password)
                 ->setCreatedAt(new DateTimeImmutable())
                 ->setUpdateAt(new DateTimeImmutable());
