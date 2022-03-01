@@ -13,11 +13,10 @@ abstract class AbstractEndPoint extends WebTestCase
 {
     private $token = null;
 
-    private const SERVER_INFORMATIONS = [
+    private $serverInfo = [
         'ACCEPT' => 'application/json', 
         'CONTENT_TYPE' => 'application/json',
         'HTTP_ACCEPT' => 'application/json',
-        'HTTP_AUTHORIZATION' => 'Bearer '
     ];
 
     protected const TOKEN_NOT_FOUND = 'JWT Token not found';
@@ -36,6 +35,7 @@ abstract class AbstractEndPoint extends WebTestCase
 
         if ($withAuthentication) {
             $this->token = $this->getJWT(true);
+            $this->serverInfo['HTTP_AUTHORIZATION'] = 'Bearer '. $this->token;
         }
         
         $client = self::createClient();
@@ -46,12 +46,7 @@ abstract class AbstractEndPoint extends WebTestCase
             $uri.$json,
             $parameters,
             [],
-            [
-                'ACCEPT' => 'application/json', 
-                'CONTENT_TYPE' => 'application/json',
-                'HTTP_ACCEPT' => 'application/json',
-                'HTTP_AUTHORIZATION' => 'Bearer ' . $this->token
-            ],
+            $this->serverInfo,
             $payload
         );
 
@@ -71,14 +66,13 @@ abstract class AbstractEndPoint extends WebTestCase
             '/security/login',
             [],
             [],
-            self::SERVER_INFORMATIONS,
+            $this->serverInfo,
             sprintf(self::LOGIN_PAYLOAD, UserFixtures::DEFAULT_EMAIL, UserFixtures::DEFAULT_PASSWORD)
         );
         
 
         $content = $client->getResponse()->getContent();
         $contentDecoded = json_decode($content, true);
-
         $token = $contentDecoded['token'];
         
         self::ensureKernelShutdown();

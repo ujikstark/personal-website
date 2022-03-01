@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Security;
 
 class UserAuthorizationCheckerTest extends TestCase
 {
+    
     private MockObject|Security $security;
 
     private UserAuthorizationChecker $testedObject;

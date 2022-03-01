@@ -16,7 +16,8 @@ final class CreateUserDTO
     private string $email;
 
     #[
-        Assert\Regex(pattern: '/^[a-zA-Z0-9]{3,}$/'),
+        Assert\Regex(pattern: '/^[a-zA-Z0-9]{3,}/'),
+        Assert\Length(max: 50),
         Assert\NotBlank
     ]
     private string $name;

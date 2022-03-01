@@ -53,7 +53,7 @@ class TodoFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies():array
+    public function getDependencies(): array
     {
         return [
             UserFixtures::class

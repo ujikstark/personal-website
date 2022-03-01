@@ -12,6 +12,7 @@ use Tests\Functional\AbstractEndPoint;
 class UserTest extends AbstractEndPoint
 {
     private const USERS_URI = '/api/users';
+    private $user;
 
     public function testGetUsers(): void
     {       
@@ -21,7 +22,8 @@ class UserTest extends AbstractEndPoint
             self::USERS_URI,
             '',
             [],
-            true
+            true,
+            ''
         );
 
         $content = $response->getContent();
@@ -37,7 +39,10 @@ class UserTest extends AbstractEndPoint
         $response = $this->getResponseFromRequest(
             Request::METHOD_POST,
             self::USERS_URI,
-            $this->getPayload()
+            $this->getPayload(),
+            [],
+            false,
+            ''
         );
 
         $content = $response->getContent();
@@ -74,21 +79,18 @@ class UserTest extends AbstractEndPoint
         return (string) $contentDecoded['id'];
     }
 
-    /**
-     * @depends testGetDefaultUser
-     */
-    public function testDeleteDefaultUser(string $id): void
+
+    public function testDeleteDefaultUser(): void
     {
+
         $response = $this->getResponseFromRequest(
             Request::METHOD_DELETE,
-            self::USERS_URI.'/'.$id,
+            self::USERS_URI.'/'.UserFixtures::DEFAULT_UUID,
             $this->getPayload(),
             [],
-            false
+            true,
+            ''
         );
-
-        $content = $response->getContent();
-        $contentDecoded = json_decode($content, true);
 
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
@@ -100,7 +102,7 @@ class UserTest extends AbstractEndPoint
         $name = $faker->name();
 
         return sprintf(
-            '{"email": "%s" , "password": "password2", "name": "%s"}',
+            '{"email": "%s" , "password": "password1", "name": "%s"}',
             $email,
             $name
         );
