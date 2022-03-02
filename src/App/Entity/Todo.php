@@ -29,7 +29,12 @@ use Symfony\Component\Serializer\Annotation as Serializer;
         ],
         itemOperations: [
             'delete',
-            'put',
+            'put' => [
+                'input' => PersistTodoDTO::class,
+                'normalization_context' => [
+                    'groups' => ['persist_todo'],
+                ],
+            ],
             'get' => [
                 'controller' => NotFoundAction::class,
                 'read' => false,
