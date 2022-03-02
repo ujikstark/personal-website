@@ -17,6 +17,11 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        refresh:
+            pattern: ^/security/refresh-token
+            stateless: true
+            refresh_jwt: ~
         
         login:
             pattern: ^/security/login

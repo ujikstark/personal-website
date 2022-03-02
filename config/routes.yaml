@@ -1,2 +1,5 @@
 api_login_check:
     path: /security/login
+
+gesdinet_jwt_refresh_token:
+    path: /security/refresh-token
