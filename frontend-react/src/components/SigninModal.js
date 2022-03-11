@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { Form, Modal, Button } from "react-bootstrap";
+import { useAuthUpdate } from "../contexts/AuthContext";
 
 function SigninModal () {
 
     const [modal, setModal] = useState(false);
-
+    const updateAuth = useAuthUpdate();
     const toggleModal = () => setModal(!modal);
 
     const handleCancel = () => {
         toggleModal();
+    }
+
+    const handleSigninSubmit = () => {
+        updateAuth(true);
     }
 
     return (
@@ -20,24 +25,19 @@ function SigninModal () {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Email address</Form.Label>
-                            <Form.Control type="email" placeholder="Enter email" />
-                            <Form.Text className="text-muted">
-                            We'll neverr share your email with anyone else.
-                            </Form.Text>
+                        <Form.Group className="mb-3" controlId="formEmail">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control type="email" placeholder="Your email address" />
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                        <Form.Group className="mb-3" controlId="formPassword">
                             <Form.Label>Password</Form.Label>
                             <Form.Control type="password" placeholder="Password" />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                            <Form.Check type="checkbox" label="Check me out" />
-                        </Form.Group>
-                        <Button variant="primary" type="submit">
-                            Submit
-                        </Button>
+                        </Form.Group>    
+                        <div className="d-flex justify-content-around mt-4">
+                            <Button className="mr-4 ml-4" variant="primary" type="submit" onClick={handleSigninSubmit}>Sign in</Button>
+                        </div>             
+
                     </Form>
                 </Modal.Body>
             </Modal>
