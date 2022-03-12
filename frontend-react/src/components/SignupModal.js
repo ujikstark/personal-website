@@ -1,15 +1,27 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Form, Modal, Button, Navbar } from "react-bootstrap";
 import { useAuthUpdate } from "../contexts/AuthContext";
+import useUserFormValidation from "../hooks/useUserFormValidation";
+import UserFormInput from "./UserFormInput";
 
 function SignupModal () {
 
     const [modal, setModal] = useState(false);
-    const toggleModal = () => setModal(!modal);
+    const { values, errors, touched, handleChange, clearAll } = useUserFormValidation();
+
+    const innerRef = useRef();
+
+    useEffect(() => innerRef.current && innerRef.current.focus(), [modal]);
+
+    const toggleModal = () => {
+        setModal(!modal);
+    }
 
     const handleCancel = () => {
-        toggleModal();
+        toggleModal();  
     }
+
+    const inputTypes = ['email', 'name', 'password', 'confirmPassword'];
 
 
     return (
@@ -21,21 +33,21 @@ function SignupModal () {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group className="mb-3" controlId="formName">
-                            <Form.Label>Full Name</Form.Label>
-                            <Form.Control type="text" placeholder="Your Name" />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formEmail">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" placeholder="Your email address" />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" placeholder="Password" />
-                        </Form.Group>    
-                        <div className="d-flex justify-content-around mt-4">
-                            <Button className="mr-4 ml-4" variant="primary" type="submit" block>Sign up</Button>
+                        {inputTypes.map((type, index) => (
+                            <UserFormInput
+                                type={type}
+                                asterisk={true}
+                                innerRef={innerRef}
+                                values={values}
+                                errors={errors}
+                                touched={touched}
+                                handleChange={handleChange}
+                                key={index}
+                            />
+                        ))}
+                  
+                        <div className="d-grid mt-4">
+                            <Button className="mr-4 ml-4" variant="primary" type="submit" size="lg">Sign up</Button>
                         </div>             
 
                     </Form>
