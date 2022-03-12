@@ -12,7 +12,15 @@ function SignupModal () {
 
     const innerRef = useRef();
 
-    useEffect(() => innerRef.current && innerRef.current.focus(), [modal]);
+    const inputTypes = ['email', 'name', 'password', 'confirmPassword'];
+    const isFormValid = Object.keys(errors).length === 0 && Object.keys(touched).length === inputTypes.length;
+
+
+    useEffect(() => {
+        setTimeout(() => {
+            innerRef.current && innerRef.current.focus()
+        }, 4000)         
+    }, [modal]);
 
     const toggleModal = () => {
         setModal(!modal);
@@ -28,9 +36,6 @@ function SignupModal () {
         setInError(true);
     
     }
-
-    const inputTypes = ['email', 'name', 'password', 'confirmPassword'];
-    const isFormValid = Object.keys(errors).length === 0 && Object.keys(touched).length === inputTypes.length;
 
 
     return (
@@ -56,7 +61,7 @@ function SignupModal () {
                         ))}
                         {inError &&
                         <Alert variant="danger" onClose={() => setInError(false)} dismissible>
-                            This address email is already taken, try another one.
+                            <p>This address email is already taken, try another one.</p>
                         </Alert>
                         }
                         <div className="d-grid mt-4">   

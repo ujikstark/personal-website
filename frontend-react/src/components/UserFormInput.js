@@ -1,5 +1,6 @@
 import { Form } from "react-bootstrap";
 import userFormText from "../helper/userFormText";
+import PropTypes from 'prop-types';
 
 
 function UserFormInput ({ type, asterisk, innerRef, handleChange, values, errors, touched}) {
@@ -13,18 +14,28 @@ function UserFormInput ({ type, asterisk, innerRef, handleChange, values, errors
             {type === 'currentPassword'
                 ? <Form.Control
                     ref={ref} onChange={handleChange}
-                    values={values['type']} type={htmlType} name={type} id={type} 
+                    values={values['type']} type={htmlType} name={type} id={type} placeholder={userFormText[type].placeholder}
                 />
                 : <Form.Control
                     ref={ref} 
                     onChange={handleChange}
                     isInvalid={touched[type] && errors[type]} isValid={touched[type] && !errors[type]}
-                    values={values['type']} type={htmlType} name={type} id={type}
+                    values={values['type']} type={htmlType} name={type} id={type} placeholder={userFormText[type].placeholder}
                 />  
             }
             <Form.Control.Feedback type="invalid">{errors[type]}</Form.Control.Feedback>
         </Form.Group>
     );
 }   
+
+UserFormInput.propTypes = {
+    type: PropTypes.string,
+    asterisk: PropTypes.bool,
+    innerRef: PropTypes.object,
+    handleChange: PropTypes.func,
+    values: PropTypes.object,
+    errors: PropTypes.object,
+    touched: PropTypes.object
+};
 
 export default UserFormInput;

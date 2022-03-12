@@ -1,5 +1,5 @@
 import React from 'react';
-import userFormText from '../helper/userFormText';
+import userFormText from './userFormText';
 
 export default function validateUserForm (values) {
     const errors = {};
