@@ -1,19 +1,36 @@
-import { useState } from "react";
-import { Form, Modal, Button } from "react-bootstrap";
-import { useAuthUpdate } from "../contexts/AuthContext";
+import { useEffect, useRef, useState } from "react";
+import { Form, Modal, Button, Alert } from "react-bootstrap";
+import useUserFormValidation from "../hooks/useUserFormValidation";
+import UserFormInput from "./UserFormInput";
 
 function SigninModal () {
 
     const [modal, setModal] = useState(false);
-    const updateAuth = useAuthUpdate();
+    const { values, handleChange, clearAll } = useUserFormValidation(); 
+    const [inError, setInError] = useState(false);
+    
+    const innerRef = useRef();
+    
+    useEffect(() => {
+        setTimeout(() => {
+            innerRef.current && innerRef.current.focus()
+        }, 4000) 
+    }, [modal]);
+    
+    const inputTypes = ['email', 'password'];
+    const isFormFilled = values.password && values.email;
+    
     const toggleModal = () => setModal(!modal);
 
     const handleCancel = () => {
+        setInError(false);
+        clearAll();
         toggleModal();
     }
 
     const handleSigninSubmit = () => {
-        updateAuth(true);
+        setInError(true);
+
     }
 
     return (
@@ -25,17 +42,25 @@ function SigninModal () {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group className="mb-3" controlId="formEmail">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" placeholder="Your email address" />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" placeholder="Password" />
-                        </Form.Group>    
+                        {inputTypes.map((type, index) => (
+                                <UserFormInput
+                                    type={type}
+                                    asterisk={false}
+                                    innerRef={innerRef}
+                                    values={values}
+                                    errors={{}}
+                                    touched={{}}
+                                    handleChange={handleChange}
+                                    key={index}
+                                />
+                        ))}
+                        {inError &&
+                            <Alert variant="danger" onClose={() => setInError(false)} dismissible>
+                                <p>Incorrect username or password.</p>
+                            </Alert>
+                        }
                         <div className="d-flex justify-content-around mt-4">
-                            <Button className="mr-4 ml-4" variant="primary" type="submit" onClick={handleSigninSubmit}>Sign in</Button>
+                            <Button className="mr-4 ml-4" variant="primary" type="submit" onClick={handleSigninSubmit} href="#">Sign in</Button>
                         </div>             
 
                     </Form>
