@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { useAuth, useAuthUpdate } from '../contexts/AuthContext';
 import SigninModal from './SigninModal';
+import SignupModal from './SignupModal';
 
 function NavigationBar() {
 
@@ -28,9 +29,7 @@ function NavigationBar() {
                         : <>
                             <Nav className="ms-auto">
                                 <SigninModal/>
-                                <Navbar.Text className="btn btn-link" as="span">
-                                    Sign up
-                                </Navbar.Text>
+                                <SignupModal/>
                             </Nav>
                         </>
                     }
