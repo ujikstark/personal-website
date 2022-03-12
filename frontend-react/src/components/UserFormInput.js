@@ -6,7 +6,6 @@ function UserFormInput ({ type, asterisk, innerRef, handleChange, values, errors
     const ref = type === 'email' ? innerRef : null;
     const htmlType = type.toLowerCase().includes('password') ? 'password' : type;
 
-    console.log(errors[type]);
 
     return (
         <Form.Group>
