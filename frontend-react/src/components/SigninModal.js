@@ -15,9 +15,7 @@ function SigninModal () {
     const innerRef = useRef();
     
     useEffect(() => {
-        setTimeout(() => {
-            innerRef.current && innerRef.current.focus()
-        }, 4000) 
+        innerRef.current && innerRef.current.focus()
     }, [modal]);
     
     const inputTypes = ['email', 'password'];
@@ -67,11 +65,11 @@ function SigninModal () {
                                 />
                         ))}
                         {inError &&
-                            <Alert variant="danger" onClose={() => setInError(false)} dismissible>
+                            <Alert className="mt-4" variant="danger" onClose={() => setInError(false)} dismissible>
                                 <p>Incorrect username or password.</p>
                             </Alert>
                         }
-                        <div className="d-flex justify-content-around mt-4">
+                        <div className="d-grid mt-4">
                             <Button disabled={!isFormFilled} className="mr-4 ml-4" variant="primary" type="submit" onClick={handleSigninSubmit} href="#">Sign in</Button>
                         </div>             
 

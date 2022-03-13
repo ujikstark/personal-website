@@ -17,9 +17,7 @@ function SignupModal () {
 
 
     useEffect(() => {
-        setTimeout(() => {
-            innerRef.current && innerRef.current.focus()
-        }, 4000)         
+        innerRef.current && innerRef.current.focus()       
     }, [modal]);
 
     const toggleModal = () => {
@@ -60,7 +58,7 @@ function SignupModal () {
                             />
                         ))}
                         {inError &&
-                        <Alert variant="danger" onClose={() => setInError(false)} dismissible>
+                        <Alert className="mt-4" variant="danger" onClose={() => setInError(false)} dismissible>
                             <p>This address email is already taken, try another one.</p>
                         </Alert>
                         }
