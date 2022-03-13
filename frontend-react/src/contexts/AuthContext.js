@@ -12,10 +12,11 @@ export function useAuthUpdate () {
 }
 
 export default function AuthProvider({ children }) {
-    const [auth, setAuth] = useState(false);
+    const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
 
     function updateAuth (newAuth) {
         setAuth(newAuth);
+        localStorage.setItem('auth', JSON.stringify(newAuth));
     }
 
     return (
@@ -26,3 +27,10 @@ export default function AuthProvider({ children }) {
         </AuthContext.Provider>
     );
 }
+
+AuthProvider.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node
+    ])
+};
