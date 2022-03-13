@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Form, Modal, Button, Alert } from "react-bootstrap";
+import { Form, Modal, Button, Alert, Spinner } from "react-bootstrap";
 import useUserFormValidation from "../hooks/useUserFormValidation";
 import { getMe, signinSubmit } from "../requests/user";
 import UserFormInput from "./UserFormInput";
@@ -8,8 +8,9 @@ import { useAuthUpdate } from "../contexts/AuthContext";
 function SigninModal () {
 
     const [modal, setModal] = useState(false);
-    const { values, handleChange, clearAll } = useUserFormValidation(); 
     const [inError, setInError] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const { values, handleChange, clearAll } = useUserFormValidation(); 
     const updateAuth = useAuthUpdate();
 
     const innerRef = useRef();
@@ -30,8 +31,9 @@ function SigninModal () {
     }
 
     const handleSigninSubmit = async () => {
-        
+        setLoading(true);
         const { auth, user } = await signinSubmit(values);
+        setLoading(false);
 
         if (!auth.isAuthenticated) {
             setInError(true);
@@ -40,7 +42,6 @@ function SigninModal () {
         }
 
         updateAuth(auth);
-
     }
 
     return (
@@ -69,10 +70,12 @@ function SigninModal () {
                                 <p>Incorrect username or password.</p>
                             </Alert>
                         }
-                        <div className="d-grid mt-4">
-                            <Button disabled={!isFormFilled} className="mr-4 ml-4" variant="primary" type="submit" onClick={handleSigninSubmit} href="#">Sign in</Button>
+                        <div className="d-flex justify-content-around mt-4">
+                            {loading
+                                ? <Spinner animation="border" variant="primary"/>
+                                : <Button disabled={!isFormFilled} className="mr-4 ml-4" variant="primary" type="submit" onClick={handleSigninSubmit} href="#">Sign in</Button>
+                            }
                         </div>             
-
                     </Form>
                 </Modal.Body>
             </Modal>
