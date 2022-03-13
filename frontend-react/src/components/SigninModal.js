@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { Form, Modal, Button, Alert } from "react-bootstrap";
 import useUserFormValidation from "../hooks/useUserFormValidation";
+import { getMe, signinSubmit } from "../requests/user";
 import UserFormInput from "./UserFormInput";
+import { useAuthUpdate } from "../contexts/AuthContext";
 
 function SigninModal () {
 
     const [modal, setModal] = useState(false);
     const { values, handleChange, clearAll } = useUserFormValidation(); 
     const [inError, setInError] = useState(false);
-    
+    const updateAuth = useAuthUpdate();
+
     const innerRef = useRef();
     
     useEffect(() => {
@@ -28,8 +31,17 @@ function SigninModal () {
         toggleModal();
     }
 
-    const handleSigninSubmit = () => {
-        setInError(true);
+    const handleSigninSubmit = async () => {
+        
+        const { auth, user } = await signinSubmit(values);
+
+        if (!auth.isAuthenticated) {
+            setInError(true);
+
+            return;
+        }
+
+        updateAuth(auth);
 
     }
 
