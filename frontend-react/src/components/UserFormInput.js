@@ -9,7 +9,7 @@ function UserFormInput ({ type, asterisk, innerRef, handleChange, values, errors
 
 
     return (
-        <Form.Group>
+        <Form.Group className="mb-3">
             <Form.Label htmlFor={type}>{userFormText[type].label}{asterisk && <span className="text-danger"> *</span>}</Form.Label>
             {type === 'currentPassword'
                 ? <Form.Control
