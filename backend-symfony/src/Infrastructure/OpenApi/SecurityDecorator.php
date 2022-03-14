@@ -31,20 +31,6 @@ final class SecurityDecorator implements OpenApiFactoryInterface
 
     private function createLoginPath(?\ArrayObject $schemas): PathItem
     {
-        $schemas['Token'] = new \ArrayObject([
-            'type' => 'object',
-            'properties' => [
-                'token' => [
-                    'type' => 'string',
-                    'readOnly' => true,
-                ],
-                'refresh_token' => [
-                    'type' => 'string',
-                    'readOnly' => true,
-                ]
-            ],
-        ]);
-
         $schemas['Credentials'] = new \ArrayObject([
             'type' => 'object',
             'properties' => [
@@ -65,14 +51,10 @@ final class SecurityDecorator implements OpenApiFactoryInterface
                 operationId: 'login',
                 tags: ['Security'],
                 responses: [
-                    Response::HTTP_OK => [
+                    Response::HTTP_NO_CONTENT => [
                         'description' => 'Authentication successful',
                         'content' => [
-                            'application/json' => [
-                                'schema' => [
-                                    '$ref' => '#/components/schemas/Token',
-                                ],
-                            ],
+                            'application/json' => [],
                         ],
                     ],
                     Response::HTTP_UNAUTHORIZED => [
