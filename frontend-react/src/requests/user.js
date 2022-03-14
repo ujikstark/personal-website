@@ -41,3 +41,10 @@ export async function getMe () {
 
     return user;
 }
+
+export async function logout (updateAuth) {
+    updateAuth(null);
+    localStorage.removeItem('user');
+
+    await axios.post('/security/logout');
+}
