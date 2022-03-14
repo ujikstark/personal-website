@@ -24,6 +24,7 @@ final class SecurityDecorator implements OpenApiFactoryInterface
 
         $openApi->getPaths()->addPath('/security/login', $this->createLoginPath($schemas));
         $openApi->getPaths()->addPath('/security/refresh-token', $this->createRefreshTokenPath());
+        $openApi->getPaths()->addPath('/security/logout', $this->createLogoutPath());
         
         return $openApi;
     }
@@ -120,7 +121,7 @@ final class SecurityDecorator implements OpenApiFactoryInterface
                 ],
                 summary: 'Get new JWT from refresh token.',
                 requestBody: new RequestBody(
-                    description: 'Refresh JW Token',
+                    description: 'Refresh JWT Token',
                     content: new \ArrayObject([
                         'application/json' => [],
                     ]),
@@ -128,5 +129,32 @@ final class SecurityDecorator implements OpenApiFactoryInterface
                 security: [],
             ),
         );
-    }    
+    }
+    
+    private function createLogoutPath(): PathItem
+    {
+        return new PathItem(
+            ref: 'Logout',
+            post: new Operation(
+                operationId: 'logout',
+                tags: ['Security'],
+                responses: [
+                    Response::HTTP_NO_CONTENT => [
+                        'description' => 'User logged out',
+                        'content' => [
+                            'application/json' => [],
+                        ]
+                    ]
+                ],
+                summary: 'Logout user',
+                requestBody: new RequestBody(
+                    description: 'Logout user',
+                    content: new \ArrayObject([
+                        'application/json' => [],
+                    ])
+                ),
+                security: []
+            )
+        );
+    }
 }
