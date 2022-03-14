@@ -21,8 +21,12 @@ export default function AuthProvider({ children }) {
         localStorage.setItem('auth', JSON.stringify(newAuth));
     }
 
-    useEffect( async () => {
+    async function autoReload() {
         if (auth != null) await refreshToken(auth, updateAuth); 
+    }
+
+    useEffect(() => {
+        autoReload();
     });
     
 

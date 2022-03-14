@@ -1,10 +1,11 @@
-import { addMinutes } from 'date-fns';
-import React, { useEffect } from 'react';
-import { Button, Container, Nav, Navbar } from "react-bootstrap";
+import React from 'react';
+import { Container, Nav, Navbar } from "react-bootstrap";
 import { useAuth, useAuthUpdate } from '../contexts/AuthContext';
 import { logout } from '../requests/user';
 import SigninModal from './SigninModal';
 import SignupModal from './SignupModal';    
+import { Link } from 'react-router-dom';
+
 
 function NavigationBar() {
 
@@ -16,11 +17,17 @@ function NavigationBar() {
     }
 
     return (
-        <Navbar fixed="top" bg="light" expand="lg" className={'sticky-top'}>
+        <Navbar fixed="top" bg="dark" variant="dark" expand="lg" className={'sticky-top'}>
             <Container>
-                <Navbar.Brand className="py-3">NePrint</Navbar.Brand>
+                <Link to="/">
+                    <Navbar.Brand className="py-3">NePrint</Navbar.Brand>
+                </Link>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
+                    <Nav className="mr-auto">
+                        <Link to="/todo">Todo List
+                        </Link>
+                    </Nav>
                     {auth 
                         ? <>
                             <Nav className="ms-auto">
@@ -38,6 +45,7 @@ function NavigationBar() {
                     
                 </Navbar.Collapse>
             </Container>
+            
       </Navbar>
     );
 }
