@@ -1,9 +1,12 @@
 import React from "react";
 import { Card, Container } from "react-bootstrap";
+import { Helmet } from 'react-helmet';
+
 
 function Home() {
     return (
         <Container>
+            <Helmet><title>Homepage</title></Helmet>
             <h1 className="mt-2 mb-3">Homepage</h1>
             <Card className="mt-4 m-2 pr-2 pl-2 shadow">
                 <Card.Body>
