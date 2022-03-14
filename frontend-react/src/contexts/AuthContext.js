@@ -1,5 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from 'prop-types';
+import refreshToken from "../requests/refreshToken";
 
 const AuthContext = React.createContext();
 const AuthUpdateContext = React.createContext();
@@ -19,6 +20,11 @@ export default function AuthProvider({ children }) {
         setAuth(newAuth);
         localStorage.setItem('auth', JSON.stringify(newAuth));
     }
+
+    useEffect( async () => {
+        if (auth != null) await refreshToken(auth, updateAuth); 
+    });
+    
 
     return (
         <AuthContext.Provider value={auth}>
