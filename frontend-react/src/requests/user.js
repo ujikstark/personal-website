@@ -1,5 +1,5 @@
 import axios from "../config/axios";
-import { addHours } from 'date-fns';
+import { addHours, addMinutes } from 'date-fns';
 
 
 export async function signinSubmit (values) {
@@ -23,7 +23,7 @@ export async function signinSubmit (values) {
         return { auth, user: null };
     }
 
-    auth.exp = addHours((new Date()), 1).getTime();
+    auth.exp = addMinutes((new Date()), 2).getTime();
     auth.isAuthenticated = true;
 
     const user = await getMe(auth);

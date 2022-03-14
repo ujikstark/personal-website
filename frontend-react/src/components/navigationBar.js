@@ -1,9 +1,10 @@
-import React from 'react';
+import { addMinutes } from 'date-fns';
+import React, { useEffect } from 'react';
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { useAuth, useAuthUpdate } from '../contexts/AuthContext';
 import { logout } from '../requests/user';
 import SigninModal from './SigninModal';
-import SignupModal from './SignupModal';
+import SignupModal from './SignupModal';    
 
 function NavigationBar() {
 
