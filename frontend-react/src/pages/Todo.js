@@ -1,16 +1,16 @@
 import React from "react";
-import { Container } from "react-bootstrap";
+import { Container, Form, Col, Row, Button, Alert } from "react-bootstrap";
 import { Helmet } from 'react-helmet';
+import TodoContainer from "../components/TodoContainer";
 
 
 function Todo () {
-    return (
-        <Container>
-            <Helmet><title>Todo list</title></Helmet>
-            <h1>Todo</h1>
-
-        </Container>
-    );
+    return <>
+        <Helmet><title>Todo list</title></Helmet>
+        <h1 className="mt-4 mb-4">Todo list</h1>
+        <TodoContainer/>
+    </>
+       
 }
 
 export default Todo;
