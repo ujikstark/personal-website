@@ -9,16 +9,18 @@ function TodoForm ({ todos, setTodos, todo }) {
     const handleSubmit =  (e) => {
         e.preventDefault();
        
-        setTodos({
+        setTodos([
             ...todos,
             newTodo
-        })
-        
+        ])
+
+        console.log(newTodo);
     }
 
     const handleChange = e => {
         let { name, value } = e.target;
         setNewTodo({
+            ...newTodo,
             [name]: value
         });
     }
@@ -51,7 +53,7 @@ function TodoForm ({ todos, setTodos, todo }) {
                         onChange={handleChange} value={newTodo.reminder} id="reminder" name="reminder" type="datetime-local"/>
                     <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
                 </Form.Group>
-                <Col>
+                <Col>   
                     <Button type="submit">Add Todo</Button>
                 </Col>
             </Row>
