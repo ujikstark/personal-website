@@ -73,7 +73,7 @@ function SigninModal () {
                         <div className="d-flex justify-content-around mt-4">
                             {loading
                                 ? <Spinner animation="border" variant="primary"/>
-                                : <Button disabled={!isFormFilled} className="mr-4 ml-4" variant="primary" type="submit" onClick={handleSigninSubmit} href="#">Sign in</Button>
+                                : <Button disabled={!isFormFilled} className="mr-4 ml-4" variant="primary" type="submit" onClick={handleSigninSubmit}>Sign in</Button>
                             }
                         </div>             
                     </Form>
