@@ -1,9 +1,9 @@
 import React, { useState } from "react"
-import { Button, Collapse, Row } from "react-bootstrap";
+import { Button, Col, Collapse, Row } from "react-bootstrap";
 import TodoForm from "./TodoForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
-
+import { faCheckCircle, faCircle, faPen, faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import TodoDetails from "./TodoDetails";
 
 function TodoTable({ todos, setTodos }) {
     const [open, setOpen] = useState(false);
@@ -15,7 +15,7 @@ function TodoTable({ todos, setTodos }) {
 
     return (
         <>
-            <Row className="justify-content-end p-2">
+            <Row className="p-2 mb-2">
                 <Button variant={open ? 'danger' : 'primary'} onClick={() => setOpen(!open)} aria-controls="create-todo-form" aria-expanded={open}>
                     <FontAwesomeIcon className="me-2" icon={open ? faTimes : faPlus}/>
                     {open ? 'Cancel' : 'Add More Todo'}
@@ -28,9 +28,23 @@ function TodoTable({ todos, setTodos }) {
             </Collapse>
             <div className="border-top mt-3">
                 {todos.map((todo, index) => (
-                    <div className="pt-2 pb-2 border-bottom text-left" key={index}>
-                        <h5>{todo.name}</h5>
-                        
+                    <div className="pt-2 pb-2 border-bottom" key={index}>
+                        <Row>
+                            <Col className="d-flex justify-content-center align-items-center pr-1 pl-1" xs={1} sm={1}>
+                                <Button className="rounded-circle p-2" size="lg" variant={todo.isDone === true ? 'primary' : 'dark'}>
+                                    
+                                </Button>
+                            </Col>
+                            <TodoDetails todo={todo}/>
+                            <Col className="d-flex justify-content-center align-items-center pl-0 pr-1" xs={3} sm={2}>
+                                <div className="me-1">
+                                    <Button className="rounded-circle" size="sm">
+                                        <FontAwesomeIcon icon={faPen}/>
+                                    </Button>
+                                    <Button className="rounded-circle ms-2" size="sm" variant="danger"><FontAwesomeIcon icon={faTrash}/></Button>
+                                </div>
+                            </Col>
+                        </Row>
                     </div>
                 ))}
             </div>
