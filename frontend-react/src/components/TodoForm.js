@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Form, Col, Row, Button } from "react-bootstrap";
+import useTodoForm from "../hooks/useTodoForm";
 
 function TodoForm ({ todos, setTodos, todo }) {
 
-    const [newTodo, setNewTodo] = useState({});
+    const { currentTodo, errors, handleChange, clearAll } = useTodoForm(todo);
     
    
     const handleSubmit =  (e) => {
@@ -11,18 +12,10 @@ function TodoForm ({ todos, setTodos, todo }) {
        
         setTodos([
             ...todos,
-            newTodo
+            currentTodo
         ])
 
-        console.log(newTodo);
-    }
-
-    const handleChange = e => {
-        let { name, value } = e.target;
-        setNewTodo({
-            ...newTodo,
-            [name]: value
-        });
+        clearAll();
     }
 
     return (
@@ -32,25 +25,25 @@ function TodoForm ({ todos, setTodos, todo }) {
                 <Form.Group className="mb-4" as={Col} md={6} >
                     <Form.Label>Task<span className="ml-1 text-danger">*</span></Form.Label>
                     <Form.Control
-                        onChange={handleChange} value={newTodo.name} id="name" name="name" type="text" placeholder="A task" />
+                        onChange={handleChange} value={currentTodo.name} id="name" name="name" type="text" placeholder="A task" />
                     <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-4" as={Col} md={6} >
                     <Form.Label>Description</Form.Label>
                     <Form.Control
-                        onChange={handleChange} value={newTodo.description} id="description" name="description" type="text" placeholder="A Description"/>
+                        onChange={handleChange} value={currentTodo.description} id="description" name="description" type="text" placeholder="A Description"/>
                     <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-5" as={Col} sm={6} >
                     <Form.Label>Date</Form.Label>
                     <Form.Control
-                        onChange={handleChange} value={newTodo.date} id="date" name="date" type="datetime-local"/>
+                        onChange={handleChange} value={currentTodo.date} id="date" name="date" type="datetime-local"/>
                     <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-5" as={Col} sm={6} >
                     <Form.Label>Reminder</Form.Label>
                     <Form.Control
-                        onChange={handleChange} value={newTodo.reminder} id="reminder" name="reminder" type="datetime-local"/>
+                        onChange={handleChange} value={currentTodo.reminder} id="reminder" name="reminder" type="datetime-local"/>
                     <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
                 </Form.Group>
                 <Col>   
