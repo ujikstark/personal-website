@@ -2,6 +2,8 @@ import React from "react";
 import { Form, Col, Row, Button } from "react-bootstrap";
 import useTodoForm from "../hooks/useTodoForm";
 import { format } from 'date-fns';
+import PropTypes from 'prop-types';
+
 
 
 function TodoForm ({ todos, setTodos, todo, setOpen }) {
@@ -74,4 +76,12 @@ function TodoForm ({ todos, setTodos, todo, setOpen }) {
     )
 }
 
+TodoForm.propTypes = {
+    todos: PropTypes.array,
+    setTodos: PropTypes.func,
+    todo: PropTypes.object,
+    setOpen: PropTypes.func,
+};
+
 export default TodoForm;
+

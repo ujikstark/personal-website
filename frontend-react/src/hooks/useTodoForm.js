@@ -13,10 +13,14 @@ export default function useTodoForm (todo) {
 
     useEffect(() => {
         setErrors(validateTodoForm(currentTodo));
-    }, [todo]);
+    }, [currentTodo]);
 
     const handleChange = e => {
         let { name, value } = e.target;
+
+        if (['date', 'reminder'].includes(name)) {
+            value = new Date(value).getTime();
+        }
 
         setCurrentTodo({
             ...currentTodo,

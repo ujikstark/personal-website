@@ -31,7 +31,7 @@ function TodoTable({ todos, setTodos }) {
                     <div className="pt-2 pb-2 border-bottom" key={index}>
                         <Row>
                             <Col className="d-flex justify-content-center align-items-center pr-1 pl-1" xs={1} sm={1}>
-                                <Button className="rounded-circle p-2" size="lg" variant={todo.isDone === true ? 'primary' : 'dark'}>
+                                <Button className="rounded-circle p-2" size="lg" variant={todo.isDone === true ? 'dark' : 'primary'}>
                                     
                                 </Button>
                             </Col>
