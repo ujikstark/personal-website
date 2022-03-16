@@ -3,6 +3,7 @@ import { Form, Col, Row, Button } from "react-bootstrap";
 import useTodoForm from "../hooks/useTodoForm";
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
+import { createTodo } from "../requests/todos";
 
 
 
@@ -21,11 +22,10 @@ function TodoForm ({ todos, setTodos, todo, setOpen }) {
 
     const handleSubmit =  (e) => {
         e.preventDefault();
-       
-        setTodos([
-            ...todos,
-            currentTodo
-        ])
+        
+        const newTodos = createTodo(currentTodo, todos);
+
+        setTodos(newTodos);
 
         setOpen(false);
 

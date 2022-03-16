@@ -1,3 +1,7 @@
+export function getTodos () {
+    return JSON.parse(localStorage.getItem('todos')) ?? [];
+}
+
 export function createTodo(todo, todos) {
     todo.id = Math.floor(Math.random() * Math.pow(10, 7));
 

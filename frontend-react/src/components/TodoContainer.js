@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Container } from "react-bootstrap";
+import { getTodos } from "../requests/todos";
 import TodoTable from "./TodoTable";
 
 function TodoContainer() {
 
     const [todos, setTodos] = useState([]);
+
+    useEffect(() => {
+        setTodos(getTodos());
+        
+    });
 
 
     return (
