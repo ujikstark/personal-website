@@ -27,7 +27,7 @@ function TodoDetails ({ todo }) {
                     <small className="text-success">
                         <FontAwesomeIcon className="me-1" icon={faCalendarAlt}/>
 
-                        {format(todo.date, 'dd/MM/yyyy')} - {format(todo.date, 'HH:mm')}
+                        {format(todo.date, 'dd/MM/yyyy')} - {format(todo.date, 'HH:mm a')}
                     </small>
                 </div>
             }
@@ -35,7 +35,7 @@ function TodoDetails ({ todo }) {
                 <div>
                     <small className="text-info">
                         <FontAwesomeIcon className="me-1" icon={faBell}/>
-                        {format(todo.reminder, 'dd/MM/yyyy')} - {format(todo.reminder, 'HH:mm')}
+                        {format(todo.reminder, 'dd/MM/yyyy')} - {format(todo.reminder, 'HH:mm a')}
                     </small>
                 </div>
             }

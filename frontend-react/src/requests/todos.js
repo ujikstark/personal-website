@@ -1,11 +1,19 @@
 export function getTodos () {
-    return JSON.parse(localStorage.getItem('todos')) ?? [];
+    const todos = JSON.parse(localStorage.getItem('todos')) ?? [];
+    todos.sort((td1, td2) => td1.date -td2.date);
+
+    return todos;
 }
 
 export function createTodo(todo, todos) {
     todo.id = Math.floor(Math.random() * Math.pow(10, 7));
+    
+    // this is not best implementation
+    // will do insertion sort later
+    todos.push(todo);
+    todos.sort((td1, td2) => td1.date -td2.date);
 
-    return updateLocalTodos([...todos, todo]);
+    return updateLocalTodos(todos);
 }
 
 export function deleteTodos(todo, todos) {

@@ -6,7 +6,7 @@ export default function validateTodoForm (todo) {
         errors.name = 'The task must contains less than 50 characters.';
     }
 
-    if (todo.date) {
+    if (todo.id === undefined && todo.date) {
         if (new Date(todo.date).getTime() < new Date().getTime()) {
             errors.date = 'The date cannot be in the past.';
         }
