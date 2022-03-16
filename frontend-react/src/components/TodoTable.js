@@ -4,6 +4,7 @@ import TodoForm from "./TodoForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import TodoDetails from "./TodoDetails";
+import DeleteButton from "./DeleteButton";
 
 function TodoTable({ todos, setTodos }) {
     const [open, setOpen] = useState(false);
@@ -12,6 +13,7 @@ function TodoTable({ todos, setTodos }) {
     if (!Object.keys(todos).length) {
         return <TodoForm todos={todos} setTodos={setTodos} todo={{}}/>
     }
+
 
     return (
         <>
@@ -41,7 +43,7 @@ function TodoTable({ todos, setTodos }) {
                                     <Button className="rounded-circle" size="sm">
                                         <FontAwesomeIcon icon={faPen}/>
                                     </Button>
-                                    <Button className="rounded-circle ms-2" size="sm" variant="danger"><FontAwesomeIcon icon={faTrash}/></Button>
+                                    <DeleteButton todo={todo} todos={todos} setTodos={setTodos}/>
                                 </div>
                             </Col>
                         </Row>
