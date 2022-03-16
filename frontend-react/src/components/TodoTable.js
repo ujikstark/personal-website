@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Button, Col, Collapse, Row } from "react-bootstrap";
 import TodoForm from "./TodoForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faCircle, faPen, faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import TodoDetails from "./TodoDetails";
 
 function TodoTable({ todos, setTodos }) {

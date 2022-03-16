@@ -1,6 +1,8 @@
 import React from "react";
 import { Form, Col, Row, Button } from "react-bootstrap";
 import useTodoForm from "../hooks/useTodoForm";
+import { format } from 'date-fns';
+
 
 function TodoForm ({ todos, setTodos, todo, setOpen }) {
 
@@ -9,7 +11,12 @@ function TodoForm ({ todos, setTodos, todo, setOpen }) {
     const isTouched = currentTodo !== todo;
     const isFormValid = isTouched && currentTodo.name !== '' && Object.keys(errors).length === 0;
 
-   
+    const initialDate = currentTodo.date ? format(currentTodo.date, "yyyy-MM-dd'T'HH:mm") : '';
+    const initialReminder = currentTodo.reminder ? format(currentTodo.reminder, "yyyy-MM-dd'T'HH:mm") : '';
+    const minDate = currentTodo.date
+        ? format(Math.min(currentTodo.date, new Date().getTime()), "yyyy-MM-dd'T'HH:mm")
+        : format(new Date().getTime(), "yyyy-MM-dd'T'HH:mm");
+
     const handleSubmit =  (e) => {
         e.preventDefault();
        
@@ -44,15 +51,19 @@ function TodoForm ({ todos, setTodos, todo, setOpen }) {
                 <Form.Group className="mb-5" as={Col} sm={6} >
                     <Form.Label>Date</Form.Label>
                     <Form.Control
-                        isInvalid={errors.date} onChange={handleChange} value={currentTodo.date} 
-                        id="date" name="date" type="datetime-local"/>
+                        isInvalid={errors.date} onChange={handleChange} 
+                        value={initialDate} id="date" name="date" type="datetime-local"
+                        min={minDate}/>
                     <Form.Control.Feedback type="invalid">{errors.date}</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-5" as={Col} sm={6} >
                     <Form.Label>Reminder</Form.Label>
                     <Form.Control
-                        isInvalid={errors.reminder} onChange={handleChange} value={currentTodo.reminder} 
-                        id="reminder" name="reminder" type="datetime-local"/>
+                        isInvalid={errors.reminder} onChange={handleChange} value={initialReminder} 
+                        id="reminder" name="reminder" type="datetime-local" 
+                        min={format(new Date().getTime(), "yyyy-MM-dd'T'HH:mm")}
+                        max={currentTodo.date && format(currentTodo.date, "yyyy-MM-dd'T'HH:mm")}
+                    />
                     <Form.Control.Feedback type="invalid">{errors.reminder}</Form.Control.Feedback>
                 </Form.Group>
                 <Col>   
