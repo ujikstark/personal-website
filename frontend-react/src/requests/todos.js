@@ -98,7 +98,7 @@ export async function editTodo(editedTodo, todos, auth, updateAuth) {
         .then(() => true)
         .catch(() => false);
     
-    return isEdited ? updateLocalTodos(newTodos) : todos;
+    return isEdited ? updateLocalTodos(newTodos, auth) : todos;
   
 }
 
