@@ -12,7 +12,10 @@ function TodoContainer() {
     const updateAuth = useAuthUpdate();
 
     useEffect(() => {
-        setTodos(getTodos());
+        (async () => {
+            const currentTodos = await getTodos(auth, updateAuth);
+            setTodos(currentTodos);
+        })();
     }, [auth, updateAuth]);
 
     
