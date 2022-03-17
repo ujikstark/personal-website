@@ -1,5 +1,5 @@
 import { Button, Col } from "react-bootstrap";
-import { editTodo } from "../requests/todos";
+import { editTodo } from "../../requests/todos";
 
 export default function DoneButton ({ todo, todos, setTodos }) {
     

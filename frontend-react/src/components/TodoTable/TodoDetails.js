@@ -8,6 +8,10 @@ import { format } from 'date-fns';
 
 function TodoDetails ({ todo }) {
     
+    let expired = false;
+    if (new Date() > new Date(todo.date).getTime()) {
+        expired = true;
+    }    
 
     return (
         <Col className="d-flex flex-column align-items-start" xs={8} sm={9}>
@@ -24,10 +28,11 @@ function TodoDetails ({ todo }) {
             }
             {todo.date &&
                 <div>
-                    <small className="text-success">
+                    <small className={expired ? 'text-warning' : 'text-success'}>
                         <FontAwesomeIcon className="me-1" icon={faCalendarAlt}/>
 
                         {format(todo.date, 'dd/MM/yyyy')} - {format(todo.date, 'HH:mm a')}
+                        {expired && '  Date Expired'}
                     </small>
                 </div>
             }

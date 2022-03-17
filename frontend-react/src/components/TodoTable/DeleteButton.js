@@ -2,7 +2,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { deleteTodos } from "../requests/todos";
+import { deleteTodos } from "../../requests/todos";
 
 export default function DeleteButton ({ todo, todos, setTodos }) {
     const [show, setShow] = useState(false);

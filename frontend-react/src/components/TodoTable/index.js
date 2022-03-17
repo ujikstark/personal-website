@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Button, Col, Collapse, Row } from "react-bootstrap";
-import TodoForm from "./TodoForm";
+import TodoForm from "../TodoForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import TodoDetails from "./TodoDetails";
