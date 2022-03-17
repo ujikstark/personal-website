@@ -34,7 +34,7 @@ function updateLocalTodos (todos) {
     localStorage.setItem('todos', JSON.stringify(todos));
 
     return todos;
-}
+}   
 
 
 

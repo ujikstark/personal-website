@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import TodoDetails from "./TodoDetails";
 import DeleteButton from "./DeleteButton";
+import DoneButton from "./DoneButton";
 
 function TodoTable({ todos, setTodos }) {
     const [open, setOpen] = useState(false);
@@ -32,11 +33,7 @@ function TodoTable({ todos, setTodos }) {
                 {todos.map((todo, index) => (
                     <div className="pt-2 pb-2 border-bottom" key={index}>
                         <Row>
-                            <Col className="d-flex justify-content-center align-items-center pr-1 pl-1" xs={1} sm={1}>
-                                <Button className="rounded-circle p-2" size="lg" variant={todo.isDone === true ? 'dark' : 'primary'}>
-                                    
-                                </Button>
-                            </Col>
+                            <DoneButton todo={todo} todos={todos} setTodos={setTodos}/>
                             <TodoDetails todo={todo}/>
                             <Col className="d-flex justify-content-center align-items-center pl-0 pr-1" xs={3} sm={2}>
                                 <div className="me-1">
