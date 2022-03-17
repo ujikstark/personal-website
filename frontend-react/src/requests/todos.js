@@ -72,12 +72,33 @@ export async function deleteTodos(todo, todos, auth, updateAuth) {
     return isDeleted ? newTodos : todos;
 }
 
-export function editTodo(editedTodo, todos) {
+export async function editTodo(editedTodo, todos, auth, updateAuth) {
     const newTodos = todos.map(todo =>
         todo.id === editedTodo.id ? editedTodo : todo
     );
 
-    return updateLocalTodos(newTodos);
+    if (auth == null) {
+        return updateLocalTodos(newTodos);
+    }
+    
+    await refreshToken(auth, updateAuth);
+    
+    const date = editedTodo.date ? format(editedTodo.date, 'yyyy-MM-dd hh:mm:ss a') : null;
+    const reminder = editedTodo.reminder ? format(editedTodo.reminder, 'yyyy-MM-dd hh:mm:ss a') : null;
+
+    const payload = {
+        name: editedTodo.name,
+        description: editedTodo.description,
+        date: date,
+        reminder: reminder,
+        isDone: editedTodo.isDone
+    };
+    
+    const isEdited = await axios.put('/api/todos/' + editedTodo.id, JSON.stringify(payload))
+        .then(() => true)
+        .catch(() => false);
+    
+    return isEdited ? updateLocalTodos(newTodos) : todos;
   
 }
 

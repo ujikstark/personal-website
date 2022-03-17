@@ -26,7 +26,7 @@ function TodoForm ({ todos, setTodos, todo, setOpen, setTodoEdited, isFirstTodo,
     const handleSubmit =  async (e) => {
         e.preventDefault();
         
-        const newTodos = isEdit ? editTodo(currentTodo, todos) : await createTodo(currentTodo, todos, auth, updateAuth);
+        const newTodos = isEdit ? await editTodo(currentTodo, todos, auth, updateAuth) : await createTodo(currentTodo, todos, auth, updateAuth);
         
         setTodos(newTodos);
 
