@@ -56,18 +56,29 @@ export async function createTodo(todo, todos, auth, updateAuth) {
     return updateLocalTodos([...todos, todo], auth);
 }
 
-export function deleteTodos(todo, todos) {
+export async function deleteTodos(todo, todos, auth, updateAuth) {
     const newTodos = todos.filter((td) => td.id !== todo.id);
 
-    return updateLocalTodos(newTodos);
+    if (auth === null) {
+        return updateLocalTodos(newTodos);
+    }
+
+    await refreshToken(auth, updateAuth);
+
+    const isDeleted = await axios.delete('/api/todos/' + todo.id)
+        .then(() => true)
+        .catch(() => false);
+
+    return isDeleted ? newTodos : todos;
 }
 
 export function editTodo(editedTodo, todos) {
     const newTodos = todos.map(todo =>
         todo.id === editedTodo.id ? editedTodo : todo
     );
-  
+
     return updateLocalTodos(newTodos);
+  
 }
 
 function updateLocalTodos (todos, auth) {
