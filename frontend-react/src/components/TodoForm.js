@@ -3,11 +3,10 @@ import { Form, Col, Row, Button } from "react-bootstrap";
 import useTodoForm from "../hooks/useTodoForm";
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
-import { createTodo } from "../requests/todos";
+import { createTodo, editTodo } from "../requests/todos";
 
 
-
-function TodoForm ({ todos, setTodos, todo, setOpen }) {
+function TodoForm ({ todos, setTodos, todo, setOpen, setTodoEdited, isFirstTodo, isEdit }) {
 
     const { currentTodo, errors, handleChange, clearAll } = useTodoForm(todo);
     
@@ -23,13 +22,24 @@ function TodoForm ({ todos, setTodos, todo, setOpen }) {
     const handleSubmit =  (e) => {
         e.preventDefault();
         
-        const newTodos = createTodo(currentTodo, todos);
+        const newTodos = isEdit ? editTodo(currentTodo, todos) : createTodo(currentTodo, todos);
         
         setTodos(newTodos);
 
+        isEdit ? handleEdit() : handleCreate();
+    }
+
+    const handleEdit = () => {
+        setTodoEdited(0);
+        clearAll();
+    }
+
+    const handleCreate = () => {
         setOpen(false);
 
-        clearAll();
+        if (!isFirstTodo) {
+            clearAll();
+        }
     }
 
 
@@ -70,7 +80,7 @@ function TodoForm ({ todos, setTodos, todo, setOpen }) {
                     <Form.Control.Feedback type="invalid">{errors.reminder}</Form.Control.Feedback>
                 </Form.Group>
                 <Col>   
-                    <Button disabled={!isFormValid} type="submit">Add Todo</Button>
+                    <Button disabled={!isFormValid} type="submit">{isEdit ? 'Save Edit' : 'Add Todo'}</Button>
                 </Col>
             </Row>
         </Form>

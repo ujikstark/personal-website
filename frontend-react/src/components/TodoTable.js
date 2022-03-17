@@ -9,10 +9,10 @@ import DoneButton from "./DoneButton";
 
 function TodoTable({ todos, setTodos }) {
     const [open, setOpen] = useState(false);
-
+    const [todoEdited, setTodoEdited] = useState(0);
 
     if (!Object.keys(todos).length) {
-        return <TodoForm todos={todos} setTodos={setTodos} todo={{}}/>
+        return <TodoForm todos={todos} setTodos={setTodos} setOpen={setOpen} todo={{}} isFirstTodo={true} isEdit={false}/>
     }
 
 
@@ -37,13 +37,18 @@ function TodoTable({ todos, setTodos }) {
                             <TodoDetails todo={todo}/>
                             <Col className="d-flex justify-content-center align-items-center pl-0 pr-1" xs={3} sm={2}>
                                 <div className="me-1">
-                                    <Button className="rounded-circle" size="sm">
+                                    <Button onClick={() => setTodoEdited(todoEdited === todo.id ? 0 : todo.id)} className="rounded-circle" size="sm">
                                         <FontAwesomeIcon icon={faPen}/>
                                     </Button>
                                     <DeleteButton todo={todo} todos={todos} setTodos={setTodos}/>
                                 </div>
                             </Col>
                         </Row>
+                        <Collapse in={todo.id === todoEdited} className="mb-3">
+                            <div id="edit-todo-form">
+                                <TodoForm todos={todos} setTodos={setTodos} setOpen={setOpen} setTodoEdited={setTodoEdited} todo={todo} isFirstTodo={false} isEdit={true}></TodoForm>
+                            </div>
+                        </Collapse>
                     </div>
                 ))}
             </div>

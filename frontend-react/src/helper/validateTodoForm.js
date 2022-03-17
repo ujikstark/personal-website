@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 
 export default function validateTodoForm (todo) {
     const errors = {};
@@ -13,6 +14,9 @@ export default function validateTodoForm (todo) {
     }
 
     if (todo.date && todo.reminder) {
+        console.log(format(todo.date, "yyyy - MM - dd HH:mm a"));
+        console.log(format(todo.reminder, "yyyy - MM - dd HH:mm a"));
+
         if (new Date(todo.date).getTime() <= new Date(todo.reminder).getTime()) {
             errors.reminder = 'The reminder must be before the date.';
         }

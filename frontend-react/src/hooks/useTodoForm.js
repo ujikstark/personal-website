@@ -12,6 +12,10 @@ export default function useTodoForm (todo) {
     });
 
     useEffect(() => {
+        Object.keys(todo).length && setCurrentTodo(todo);
+    }, [todo]);
+
+    useEffect(() => {
         setErrors(validateTodoForm(currentTodo));
     }, [currentTodo]);
 
