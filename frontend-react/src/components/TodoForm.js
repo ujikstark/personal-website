@@ -93,6 +93,11 @@ function TodoForm ({ todos, setTodos, todo, setOpen, setTodoEdited, isFirstTodo,
                         disabled={auth === null}
                     />
                     <Form.Control.Feedback type="invalid">{errors.reminder}</Form.Control.Feedback>
+                    {auth === null &&
+                        <span className="text-info small">
+                            You must be logged in to use the reminder!
+                        </span>
+                    }   
                 </Form.Group>
                 <Col>   
                     <Button disabled={!isFormValid} type="submit">{isEdit ? 'Save Edit' : 'Add Todo'}</Button>

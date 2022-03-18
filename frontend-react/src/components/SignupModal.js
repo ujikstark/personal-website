@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Form, Modal, Button, Navbar, Alert } from "react-bootstrap";
+import { Form, Modal, Button, Navbar, Alert, Spinner } from "react-bootstrap";
 import { useAuthUpdate } from "../contexts/AuthContext";
 import useUserFormValidation from "../hooks/useUserFormValidation";
+import { signinSubmit, signupSubmit } from "../requests/user";
 import UserFormInput from "./UserFormInput";
 
 function SignupModal () {
@@ -9,6 +10,8 @@ function SignupModal () {
     const [modal, setModal] = useState(false);
     const { values, errors, touched, handleChange, clearAll } = useUserFormValidation();
     const [inError, setInError] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const updateAuth = useAuthUpdate();
 
     const innerRef = useRef();
 
@@ -25,14 +28,26 @@ function SignupModal () {
     }
 
     const handleCancel = () => {
+        setLoading(false);
         clearAll();
         toggleModal();  
     }
 
-    const handleSignupSubmit = () => {
+    const handleSignupSubmit = async () => {
+        setLoading(true);
+        const isCreated = await signupSubmit(values);
         
-        setInError(true);
-    
+        if (!isCreated) {
+            setInError(true);
+            setLoading(false);
+            
+            return;
+        }
+
+        const { auth, user } = await signinSubmit(values);
+        setLoading(false);
+        updateAuth(auth);
+
     }
 
 
@@ -62,8 +77,11 @@ function SignupModal () {
                             <p>This address email is already taken, try another one.</p>
                         </Alert>
                         }
-                        <div className="d-grid mt-4">   
-                            <Button type="hidden" disabled={!isFormValid} className="mr-4 ml-4" variant="primary" size="lg" onClick={handleSignupSubmit} href="#">Sign up</Button>
+                        <div className="d-flex justify-content-around">
+                            {loading 
+                                ? <Spinner animation="border" variants="primary"></Spinner> 
+                                : <Button type="hidden" disabled={!isFormValid} className="mr-4 ml-4" variant="primary" size="lg" onClick={handleSignupSubmit}>Sign up</Button>
+                            }    
                         </div>             
 
                     </Form>
