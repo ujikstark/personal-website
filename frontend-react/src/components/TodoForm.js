@@ -23,19 +23,29 @@ function TodoForm ({ todos, setTodos, todo, setOpen, setTodoEdited, isFirstTodo,
     const auth = useAuth();
     const updateAuth = useAuthUpdate();
 
+    if (auth === null) {
+        currentTodo.reminder = '';
+    }
+
+    if (currentTodo.description == null) currentTodo.description = '';
+
     const handleSubmit =  async (e) => {
         e.preventDefault();
         
         const newTodos = isEdit ? await editTodo(currentTodo, todos, auth, updateAuth) : await createTodo(currentTodo, todos, auth, updateAuth);
         
+        if (newTodos === todos) {
+            return;
+        }
+
         setTodos(newTodos);
+        
 
         isEdit ? handleEdit() : handleCreate();
     }
 
     const handleEdit = () => {
         setTodoEdited(0);
-        clearAll();
     }
 
     const handleCreate = () => {
@@ -80,6 +90,7 @@ function TodoForm ({ todos, setTodos, todo, setOpen, setTodoEdited, isFirstTodo,
                         id="reminder" name="reminder" type="datetime-local" 
                         min={format(new Date().getTime(), "yyyy-MM-dd'T'HH:mm")}
                         max={currentTodo.date && format(currentTodo.date, "yyyy-MM-dd'T'HH:mm")}
+                        disabled={auth === null}
                     />
                     <Form.Control.Feedback type="invalid">{errors.reminder}</Form.Control.Feedback>
                 </Form.Group>
