@@ -4,6 +4,7 @@ import useTodoForm from "../hooks/useTodoForm";
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import { createTodo, editTodo } from "../requests/todos";
+import {useAuth, useAuthUpdate} from "../contexts/AuthContext";
 
 
 function TodoForm ({ todos, setTodos, todo, setOpen, setTodoEdited, isFirstTodo, isEdit }) {
@@ -19,19 +20,32 @@ function TodoForm ({ todos, setTodos, todo, setOpen, setTodoEdited, isFirstTodo,
         ? format(Math.min(currentTodo.date, new Date().getTime()), "yyyy-MM-dd'T'HH:mm")
         : format(new Date().getTime(), "yyyy-MM-dd'T'HH:mm");
 
-    const handleSubmit =  (e) => {
+    const auth = useAuth();
+    const updateAuth = useAuthUpdate();
+
+    if (auth === null) {
+        currentTodo.reminder = '';
+    }
+
+    if (currentTodo.description == null) currentTodo.description = '';
+
+    const handleSubmit =  async (e) => {
         e.preventDefault();
         
-        const newTodos = isEdit ? editTodo(currentTodo, todos) : createTodo(currentTodo, todos);
+        const newTodos = isEdit ? await editTodo(currentTodo, todos, auth, updateAuth) : await createTodo(currentTodo, todos, auth, updateAuth);
         
+        if (newTodos === todos) {
+            return;
+        }
+
         setTodos(newTodos);
+        
 
         isEdit ? handleEdit() : handleCreate();
     }
 
     const handleEdit = () => {
         setTodoEdited(0);
-        clearAll();
     }
 
     const handleCreate = () => {
@@ -76,6 +90,7 @@ function TodoForm ({ todos, setTodos, todo, setOpen, setTodoEdited, isFirstTodo,
                         id="reminder" name="reminder" type="datetime-local" 
                         min={format(new Date().getTime(), "yyyy-MM-dd'T'HH:mm")}
                         max={currentTodo.date && format(currentTodo.date, "yyyy-MM-dd'T'HH:mm")}
+                        disabled={auth === null}
                     />
                     <Form.Control.Feedback type="invalid">{errors.reminder}</Form.Control.Feedback>
                 </Form.Group>

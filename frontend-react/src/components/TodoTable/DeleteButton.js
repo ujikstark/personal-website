@@ -2,16 +2,19 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
+import { useAuth, useAuthUpdate } from "../../contexts/AuthContext";
 import { deleteTodos } from "../../requests/todos";
 
 export default function DeleteButton ({ todo, todos, setTodos }) {
     const [show, setShow] = useState(false);
+    const auth = useAuth();
+    const updateAuth = useAuthUpdate();
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const handleDelete = (todo) => {
-        const newTodos = deleteTodos(todo, todos);
+    const handleDelete = async (todo) => {
+        const newTodos = await deleteTodos(todo, todos, auth, updateAuth);
         setTodos(newTodos);
 
         handleClose();

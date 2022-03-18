@@ -46,7 +46,7 @@ function TodoTable({ todos, setTodos }) {
                         </Row>
                         <Collapse in={todo.id === todoEdited} className="mb-3">
                             <div id="edit-todo-form">
-                                <TodoForm todos={todos} setTodos={setTodos} setOpen={setOpen} setTodoEdited={setTodoEdited} todo={todo} isFirstTodo={false} isEdit={true}></TodoForm>
+                                <TodoForm todos={todos} setTodos={setTodos} setOpen={setOpen} setTodoEdited={setTodoEdited} todo={todo} isFirstTodo={false} isEdit={true}/>
                             </div>
                         </Collapse>
                     </div>
