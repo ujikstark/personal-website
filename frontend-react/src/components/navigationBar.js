@@ -31,7 +31,11 @@ function NavigationBar() {
                     {auth 
                         ? <>
                             <Nav className="ms-auto">
-                                <Navbar.Text>berhasil login</Navbar.Text>
+                                <Link to="/me">
+                                    <Navbar.Text className="btn btn-link" as="span">
+                                        My profile
+                                    </Navbar.Text>
+                                </Link>
                                 <Navbar.Text onClick={handleLogout} className="btn btn-link">Logout</Navbar.Text>
                             </Nav>
                         </>

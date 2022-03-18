@@ -31,6 +31,18 @@ export async function signinSubmit (values) {
     return { auth, user }; 
 }
 
+export async function signupSubmit (values) {
+    const payload = {
+        email: values.email,
+        name: values.name,
+        password: values.password,
+    }
+
+    return await axios.post('/api/users', JSON.stringify(payload))
+        .then(() => true)
+        .catch(() => false);
+}
+
 export async function getMe () {
     const user = await axios.get('/api/account/me')
         .then(response => {

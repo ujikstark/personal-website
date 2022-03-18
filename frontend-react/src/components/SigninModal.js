@@ -40,7 +40,7 @@ function SigninModal () {
 
             return;
         }
-
+        
         updateAuth(auth);
     }
 
