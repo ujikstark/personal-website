@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import AuthProvider from './contexts/AuthContext';
 import { Route, Routes } from 'react-router-dom';
 import Todo from './pages/Todo';
+import Profile from './pages/Profile';
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Routes>
                     <Route path="/" exact element={<Home/>}/>
                     <Route path="/todo" element={<Todo/>}/>
+                    <Route path="/me" element={<Profile/>}/>
                 </Routes>
             </AuthProvider>
         </div>
