@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Model\Account;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\Account\UpdatePasswordController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
@@ -14,7 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     collectionOperations: [
         'updatePassword' => [
-            'path' => '/account/update-password',
+            'path' => UpdatePasswordController::PATH,
+            'controller' => UpdatePasswordController::class,
             'input' => UpdatePasswordDTO::class,
             'output' => false,
             'method' => Request::METHOD_POST,
@@ -22,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'tags' => ['Account'],
                 'summary' => 'A user can update his password.',
                 'description' => 'A user can update his password.',
-                'response' => [
+                'responses' => [
                     Response::HTTP_OK => [
                         'description' => 'Password successfully updated.',
                         'content' => [
