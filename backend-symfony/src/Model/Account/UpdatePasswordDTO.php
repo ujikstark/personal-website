@@ -2,14 +2,55 @@
 
 declare(strict_types=1);
 
+
 namespace Model\Account;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ApiResource(
+    collectionOperations: [
+        'updatePassword' => [
+            'path' => '/account/update-password',
+            'input' => UpdatePasswordDTO::class,
+            'output' => false,
+            'method' => Request::METHOD_POST,
+            'openapi_context' => [
+                'tags' => ['Account'],
+                'summary' => 'A user can update his password.',
+                'description' => 'A user can update his password.',
+                'response' => [
+                    Response::HTTP_OK => [
+                        'description' => 'Password successfully updated.',
+                        'content' => [
+                            'application/json' => [],
+                        ],
+                    ],
+                    Response::HTTP_BAD_REQUEST => [
+                        'description' => 'Input data is not valid.',
+                        'content' => [
+                            'application/json' => [],
+                        ],
+                    ],
+                ]
+            ]
+        ]
+    ],
+    itemOperations: [],
+    formats: ['json']
+)]
 class UpdatePasswordDTO
 {
+    #[SecurityAssert\UserPassword]
     private string $currentPassword;
 
+    #[Assert\Length(min: 4)]
     private string $newPassword;
 
+    #[Assert\EqualTo(propertyPath: 'newPassword')]
     private string $confirmPassword;
 
     public function getCurrentPassword(): string
