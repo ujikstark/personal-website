@@ -15,7 +15,7 @@ use Symfony\Component\Uid\Uuid;
 class UserFixtures extends Fixture
 {
     public const DEFAULT_EMAIL = 'test@admin.com';
-    public const DEFAULT_PASSWORD = 'admin';
+    public const DEFAULT_PASSWORD = 'test';
     public const DEFAULT_NAME = 'test';
     public const DEFAULT_UUID = '20354d7a-e4fe-47af-8ff6-187bca92f3f9';
 
