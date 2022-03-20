@@ -1,5 +1,6 @@
 import axios from "../config/axios";
 import { addHours, addMinutes } from 'date-fns';
+import refreshToken from "./refreshToken";
 
 
 export async function signinSubmit (values) {
@@ -41,6 +42,24 @@ export async function signupSubmit (values) {
     return await axios.post('/api/users', JSON.stringify(payload))
         .then(() => true)
         .catch(() => false);
+}
+
+export async function updatePasswordSubmit (values, auth, updateAuth) {
+    const payload = {
+        currentPassword: values.currentPassword,
+        newPassword: values.newPassword,
+        confirmPassword: values.confirmPassword
+    };
+
+    await refreshToken(auth, updateAuth);
+
+    return await axios.post('/api/account/update-password', JSON.stringify(payload))
+        .then(response => {
+            return response.status === 200;
+        })
+        .catch(() => {
+            return false;
+        })
 }
 
 export async function getMe () {
