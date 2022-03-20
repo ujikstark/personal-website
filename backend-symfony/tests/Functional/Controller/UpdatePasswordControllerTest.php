@@ -38,4 +38,86 @@ class UpdatePasswordControllerTest extends AbstractEndPoint
         $this->assertJson($content);
         $this->assertArrayHasKey('message', $contentDecoded);
     }
+
+    public function testUpdatePasswordNotLoggedIn(): void
+    {
+        $payload = sprintf(
+            '{"currentPassword": "%s","newPassword": "%s","confirmPassword": "%s"}',
+            UserFixtures::DEFAULT_PASSWORD,
+            UserFixtures::DEFAULT_PASSWORD,
+            UserFixtures::DEFAULT_PASSWORD
+        );
+
+        $response = $this->getResponseFromRequest(
+            Request::METHOD_POST,
+            self::UPDATE_PASSWORD_URI,
+            $payload,
+            [],
+            false,
+            ''
+        );
+
+        $content = $response->getContent();
+        $contentDecoded = json_decode($content, true);
+        
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        $this->assertJson($content);
+        $this->assertArrayHasKey('message', $contentDecoded);
+    }
+
+    public function testUpdatePasswordWithWrongPassword(): void
+    {
+        $payload = sprintf(
+            '{"currentPassword": "%s","newPassword": "%s","confirmPassword": "%s"}',
+            'password',
+            UserFixtures::DEFAULT_PASSWORD,
+            UserFixtures::DEFAULT_PASSWORD,
+        );
+
+        $response = $this->getResponseFromRequest(
+            Request::METHOD_POST,
+            self::UPDATE_PASSWORD_URI,
+            $payload,
+            [],
+            true,
+            ''
+        );
+
+        $content = $response->getContent();
+        $contentDecoded = json_decode($content, true);
+
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertJson($content);
+        $this->assertArrayHasKey('detail', $contentDecoded);
+        $this->assertArrayHasKey('violations', $contentDecoded);
+        $this->assertEquals('currentPassword', $contentDecoded['violations'][0]['propertyPath']);
+    }
+
+    public function testUpdatePasswordWithDifferentPassword(): void
+    {
+        $payload = sprintf(
+            '{"currentPassword": "%s","newPassword": "%s","confirmPassword": "%s"}',
+            UserFixtures::DEFAULT_PASSWORD,
+            UserFixtures::DEFAULT_PASSWORD,
+            'password'
+        );
+
+        $response = $this->getResponseFromRequest(
+            Request::METHOD_POST,
+            self::UPDATE_PASSWORD_URI,
+            $payload,
+            [],
+            true,
+            ''
+        );
+
+        $content = $response->getContent();
+        $contentDecoded = json_decode($content, true);
+
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertJson($content);
+        $this->assertArrayHasKey('detail', $contentDecoded);
+        $this->assertArrayHasKey('violations', $contentDecoded);
+        $this->assertEquals('confirmPassword', $contentDecoded['violations'][0]['propertyPath']);
+    }
 }
