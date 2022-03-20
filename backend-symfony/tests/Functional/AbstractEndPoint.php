@@ -33,13 +33,7 @@ abstract class AbstractEndPoint extends WebTestCase
         ): Response
     {
 
-        if ($withAuthentication) {
-            $this->token = $this->getJWT(true);
-            $this->serverInfo['HTTP_AUTHORIZATION'] = 'Bearer '. $this->token;
-        }
-        
-        $client = self::createClient();
-
+        $client = $this->createApiClient($withAuthentication);
 
         $client->request(
             $method,
@@ -53,7 +47,7 @@ abstract class AbstractEndPoint extends WebTestCase
         return $client->getResponse();
     }
 
-    protected function getJWT(bool $withAuthentication): string
+    protected function createApiClient(bool $withAuthentication): KernelBrowser
     {
         $client = self::createClient();
 
@@ -70,13 +64,8 @@ abstract class AbstractEndPoint extends WebTestCase
             sprintf(self::LOGIN_PAYLOAD, UserFixtures::DEFAULT_EMAIL, UserFixtures::DEFAULT_PASSWORD)
         );
         
-
         $content = $client->getResponse()->getContent();
-        $contentDecoded = json_decode($content, true);
-        $token = $contentDecoded['token'];
         
-        self::ensureKernelShutdown();
-        
-        return $token;
+        return $client;        
     }
 }
