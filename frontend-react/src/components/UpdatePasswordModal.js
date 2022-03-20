@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Alert, Button, Form, Modal, Spinner } from "react-bootstrap";
 import { useAuth, useAuthUpdate } from "../contexts/AuthContext";
 import useUserFormValidation from "../hooks/useUserFormValidation";
+import { updatePasswordSubmit } from "../requests/user";
 import UserFormInput from "./UserFormInput";
 
 
@@ -25,6 +26,15 @@ function UpdatePasswordModal () {
 
     const handleSubmit = async () => {
         setLoading(true);
+        const isUpdated = await updatePasswordSubmit(values, auth, updateAuth);
+
+        if (isUpdated) {
+            setInError(false);
+            handleCancel();
+        } else {
+            setInError(true);
+            setLoading(false);
+        }
     }
 
     return (
