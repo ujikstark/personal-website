@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Security;
 
 use App\Repository\UserRepository;
+use Infrastructure\Mailer\ResetPasswordMailer;
 use Model\Security\SendResetPasswordEmailDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,6 +20,7 @@ class SendResetPasswordEmailController extends AbstractController
     public function __construct(
         private ValidatorInterface $validator,
         private UserRepository $userRepository,
+        private ResetPasswordMailer $mailer
     ) { 
     }
 
@@ -42,7 +44,11 @@ class SendResetPasswordEmailController extends AbstractController
 
         $this->userRepository->save($user);
 
-        // setting email
+        try {
+            $this->mailer->send($user, $token);
+        } catch (\Exception $exception) {
+            return $this->json('error', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }   
 
         return $this->json(['message' => 'EMAIL_SENT']);
     }
