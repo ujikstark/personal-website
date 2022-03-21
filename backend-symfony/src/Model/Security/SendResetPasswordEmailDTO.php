@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Model\Security;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\Security\SendResetPasswordEmailController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -12,7 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     collectionOperations: [
         'resetPassword' => [
-            'path' => '/security/reset-password-email',
+            'path' => SendResetPasswordEmailController::PATH,
+            'controller' => SendResetPasswordEmailController::class,
             'input' => SendResetPasswordEmailDTO::class,
             'output' => false,
             'method' => Request::METHOD_POST,
