@@ -112,6 +112,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Todo::class, orphanRemoval: true)]
     private Collection $todos;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $resetPasswordToken = null;
+    
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $resetPasswordExpirationDate = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -281,5 +287,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getResetPasswordToken(): ?string
+    {
+        return $this->resetPasswordToken;
+    }
+
+    public function setResetPasswordToken(?string $resetPasswordToken): void
+    {
+        $this->resetPasswordToken = $resetPasswordToken;
+    }
+
+    public function getResetPasswordExpirationDate(): ?\DateTimeInterface
+    {
+        return $this->resetPasswordExpirationDate;
+    }
+
+    public function setResetPasswordExpirationDate(?\DateTimeInterface $resetPasswordExpirationDate): void
+    {
+        $this->resetPasswordExpirationDate = $resetPasswordExpirationDate;
+    }
+
+    public function isResetPasswordTokenExpired(): bool
+    {
+        return null !== $this->resetPasswordExpirationDate && $this->resetPasswordExpirationDate < new \DateTime();
+    }
+
+    public function eraseResetPasswordData(): void
+    {
+        $this->resetPasswordExpirationDate = null;
+        $this->resetPasswordToken = null;
     }
 }
