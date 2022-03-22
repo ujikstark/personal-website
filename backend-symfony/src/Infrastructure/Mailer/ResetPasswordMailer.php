@@ -7,6 +7,7 @@ namespace Infrastructure\Mailer;
 use App\Entity\User;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport\Transports;
 use Symfony\Component\Mime\Address;
 
 class ResetPasswordMailer
@@ -27,10 +28,11 @@ class ResetPasswordMailer
             ->subject('Password forgotten')
             ->htmlTemplate('email/reset-password.html.twig')
             ->context([
-                'name' => $user->getName,
+                'name' => $user->getName(),
                 'link' => sprintf('%s/reset-password/%s', $this->frontendDomain, $token)
             ]);
-
+        
+        
         $this->mailer->send($templateMail);
     }
 }

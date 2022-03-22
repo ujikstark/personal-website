@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Controller\Security;
 
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Infrastructure\Mailer\ResetPasswordMailer;
 use Model\Security\SendResetPasswordEmailDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -20,7 +22,8 @@ class SendResetPasswordEmailController extends AbstractController
     public function __construct(
         private ValidatorInterface $validator,
         private UserRepository $userRepository,
-        private ResetPasswordMailer $mailer
+        private EntityManagerInterface $em,
+        private ResetPasswordMailer $mailer,
     ) { 
     }
 
@@ -41,12 +44,13 @@ class SendResetPasswordEmailController extends AbstractController
         $user->setResetPasswordToken($token);
         $user->setResetPasswordExpirationDate(new \DateTimeImmutable('+1 hours'));
         $user->hasBeenUpdated();
-
-        $this->userRepository->save($user);
+        
+        $this->em->persist($user);
+        $this->em->flush();
 
         try {
             $this->mailer->send($user, $token);
-        } catch (\Exception $exception) {
+        } catch (TransportExceptionInterface $exception) {
             return $this->json('error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }   
 

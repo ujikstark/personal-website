@@ -20,11 +20,19 @@ services:
         exclude:
             - '../src/App/Entity/'
 
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/App/Controller/'
+        tags: ['controller.service_arguments']
+
     Domain\:
         resource: '../src/Domain/'
 
     Infrastructure\:
         resource: '../src/Infrastructure'
+
 
     Infrastructure\OpenApi\SecurityDecorator:
         decorates: 'api_platform.openapi.factory'
