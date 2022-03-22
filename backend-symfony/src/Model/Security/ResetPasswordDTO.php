@@ -5,27 +5,26 @@ declare(strict_types=1);
 namespace Model\Security;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Controller\Security\SendResetPasswordEmailController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 #[ApiResource(
     collectionOperations: [
-        'sendResetPasswordEmail' => [
-            'path' => SendResetPasswordEmailController::PATH,
-            'controller' => SendResetPasswordEmailController::class,
-            'input' => SendResetPasswordEmailDTO::class,
+        'resetPassword' => [
+            'path' => '/security/reset-password',
+            'input' => ResetPasswordDTO::class,
             'output' => false,
             'method' => Request::METHOD_POST,
             'openapi_context' => [
                 'tags' => ['Security'],
-                'summary' => 'Send a reset password email to the user.',
-                'description' => 'Send a reset password email to the user.',
+                'summary' => 'Reset the user\'s password.',
+                'description' => 'Reset the user\'s password.',
                 'security' => [],
                 'responses' => [
                     Response::HTTP_OK => [
-                        'description' => 'Email successfully sent.',
+                        'description' => 'Password successfully updated.',
                         'content' => [
                             'application/json' => [],
                         ],
@@ -36,15 +35,28 @@ use Symfony\Component\Validator\Constraints as Assert;
                             'application/json' => [],
                         ],
                     ],
-                ]
+                    Response::HTTP_FORBIDDEN => [
+                        'description' => 'Invalid reset token.',
+                        'content' => [
+                            'application/json' => [],
+                        ],
+                    ],
+                ],
             ]
         ]
     ],
     itemOperations: [],
     formats: ['json']
 )]
-class SendResetPasswordEmailDTO
+class ResetPasswordDTO
 {
-   #[Assert\Email]
-   public string $email = '';
+    public string $token = '';
+
+    #[
+        Assert\Length(min: 4),
+        Assert\Regex(pattern: '/\d/')
+    ]
+    public string $password = '';
+
+    public string $confirmPassword = '';
 }
