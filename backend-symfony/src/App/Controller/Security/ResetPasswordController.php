@@ -1,11 +1,10 @@
 <?php
 
-declare(strict_type=1);
+declare(strict_types=1);
 
 namespace App\Controller\Security;
 
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Model\Security\ResetPasswordDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,7 +19,6 @@ class ResetPasswordController extends AbstractController
     public function __construct(
         private ValidatorValidatorInterface $validator,
         private UserPasswordHasherInterface $hasher,
-        private EntityManagerInterface $em,
         private UserRepository $userRepository
     ) {   
     }
@@ -43,8 +41,7 @@ class ResetPasswordController extends AbstractController
         $user->eraseResetPasswordData();
         $user->hasBeenUpdated();
 
-        $this->em->persist($user);
-        $this->em->flush();
+        $this->userRepository->save($user);
 
         return $this->json(['email' => $user->getEmail()]);
 

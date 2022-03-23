@@ -60,5 +60,6 @@ class ResetPasswordDTO
     ]
     public string $password = '';
 
+    #[Assert\EqualTo(propertyPath: 'password')]
     public string $confirmPassword = '';
 }
