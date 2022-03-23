@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import useUserFormValidation from '../hooks/useUserFormValidation';
+import { resetPasswordEmail } from '../requests/resetPassword';
 import UserFormInput from './UserFormInput';
 
 function ResetPasswordEmailModal () {
@@ -20,6 +21,22 @@ function ResetPasswordEmailModal () {
     const handleCancel = () => {
         toggleModal();
         clearAll();
+    }
+
+    const handleSubmit = async () => {
+        setLoading(true);
+        setInError(false);
+
+        const isMailSent = await resetPasswordEmail(values.email);
+        setLoading(false);
+
+        if (!isMailSent) {
+            setInError(true);
+            
+            return;
+        }
+
+        toggleModal();
     }
 
     return (
@@ -52,7 +69,7 @@ function ResetPasswordEmailModal () {
                     <div className="d-flex justify-content-around mt-4 mb-2">
                         {loading
                             ? <Spinner animation="border" variant="primary"/>
-                            : <Button className="" disabled={!isFormValid} variant="primary" block>
+                            : <Button className="" disabled={!isFormValid} variant="primary" onClick={handleSubmit} block>
                                 Send
                             </Button>
                         }
