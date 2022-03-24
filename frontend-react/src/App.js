@@ -7,6 +7,7 @@ import AuthProvider from './contexts/AuthContext';
 import { Route, Routes } from 'react-router-dom';
 import Todo from './pages/Todo';
 import Profile from './pages/Profile';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                     <Route path="/" exact element={<Home/>}/>
                     <Route path="/todo" element={<Todo/>}/>
                     <Route path="/me" element={<Profile/>}/>
+                    <Route path="/reset-password/:token" element={<ResetPassword/>}/>
                 </Routes>
             </AuthProvider>
         </div>

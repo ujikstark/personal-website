@@ -4,6 +4,7 @@ import useUserFormValidation from "../hooks/useUserFormValidation";
 import { getMe, signinSubmit } from "../requests/user";
 import UserFormInput from "./UserFormInput";
 import { useAuthUpdate } from "../contexts/AuthContext";
+import ResetPasswordEmailModal from "./ResetPasswordEmailModal";
 
 function SigninModal () {
 
@@ -22,12 +23,9 @@ function SigninModal () {
     const inputTypes = ['email', 'password'];
     const isFormFilled = values.password && values.email;
     
-    const toggleModal = () => setModal(!modal);
-
     const handleCancel = () => {
         setInError(false);
         clearAll();
-        toggleModal();
     }
 
     const handleSigninSubmit = async () => {
@@ -44,9 +42,10 @@ function SigninModal () {
         updateAuth(auth);
     }
 
+
     return (
         <>
-            <Button onClick={toggleModal} variant="primary">Sign in</Button>
+            <Button onClick={()=> setModal(true)} variant="primary">Sign in</Button>
             <Modal size="md" show={modal} onHide={handleCancel}>
                 <Modal.Header closeButton>
                     <Modal.Title>Sign in</Modal.Title>
@@ -54,29 +53,32 @@ function SigninModal () {
                 <Modal.Body>
                     <Form>
                         {inputTypes.map((type, index) => (
-                                <UserFormInput
-                                    type={type}
-                                    asterisk={false}
-                                    innerRef={innerRef}
-                                    values={values}
-                                    errors={{}}
-                                    touched={{}}
-                                    handleChange={handleChange}
-                                    key={index}
-                                />
+                            <UserFormInput
+                                type={type}
+                                asterisk={false}
+                                innerRef={innerRef}
+                                values={values}
+                                errors={{}}
+                                touched={{}}
+                                handleChange={handleChange}
+                                key={index}
+                            />
                         ))}
-                        {inError &&
-                            <Alert className="mt-4" variant="danger" onClose={() => setInError(false)} dismissible>
-                                <p>Incorrect username or password.</p>
-                            </Alert>
-                        }
-                        <div className="d-flex justify-content-around mt-4">
-                            {loading
-                                ? <Spinner animation="border" variant="primary"/>
-                                : <Button disabled={!isFormFilled} className="mr-4 ml-4" variant="primary" type="submit" onClick={handleSigninSubmit}>Sign in</Button>
-                            }
-                        </div>             
                     </Form>
+                    {inError &&
+                        <Alert className="mt-4" variant="danger" onClose={() => setInError(false)} dismissible>
+                            <p>Incorrect username or password.</p>
+                        </Alert>
+                    }
+                    <div className="d-flex justify-content-around mt-4">
+                        {loading
+                            ? <Spinner animation="border" variant="primary"/>
+                            : <Button disabled={!isFormFilled} className="mr-4 ml-4" variant="primary" type="submit" onClick={handleSigninSubmit}>Sign in</Button>
+                        }
+                    </div>             
+                    <div className="d-flex justify-content-around mt-2">
+                        <ResetPasswordEmailModal/>
+                    </div>
                 </Modal.Body>
             </Modal>
         </>
