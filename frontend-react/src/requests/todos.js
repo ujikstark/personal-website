@@ -28,9 +28,8 @@ export async function createTodo(todo, todos, auth, updateAuth) {
     
     if (auth == null) {
         todo.id = Math.floor(Math.random() * Math.pow(10, 7));
-        todos.push(todo);
 
-        return updateLocalTodos(todos);
+        return updateLocalTodos([...todos, todo]);
     }
     
     await refreshToken(auth, updateAuth);

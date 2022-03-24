@@ -112,6 +112,9 @@ TodoForm.propTypes = {
     setTodos: PropTypes.func,
     todo: PropTypes.object,
     setOpen: PropTypes.func,
+    setTodoEdited: PropTypes.func,
+    isFirstTodo: PropTypes.bool,
+    isEdit: PropTypes.bool
 };
 
 export default TodoForm;
