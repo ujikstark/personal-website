@@ -1,10 +1,11 @@
-import { Alert, Card, Container, Form, Spinner } from "react-bootstrap";
+import { Alert, Button, Card, Container, Form, Spinner } from "react-bootstrap";
 import UserFormInput from "../components/UserFormInput";
 import useUserFormValidation from "../hooks/useUserFormValidation";
 import { useAuth, useAuthUpdate } from '../contexts/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { resetPassword } from "../requests/resetPassword";
 import { signinSubmit } from "../requests/user";
+import { useState } from "react";
 
 function ResetPassword () {
 
@@ -40,13 +41,13 @@ function ResetPassword () {
     }
 
     return (
-        <Container className="d-flex justify-content-aroung">
+        <Container className="d-flex justify-content-around">
             <Card style={{ width: '40rem' }} className="m-2 p-3 shadow">
                 <Card.Body>
                     <Card.Title>
                         Reset your password
                     </Card.Title>
-                    <Form className="text-left">
+                    <Form className="text-start">
                         {inputTypes.map((type, index) => (
                             <UserFormInput
                                 type={type}
