@@ -27,6 +27,7 @@
         "symfony/flex": "^1.17|^2",
         "symfony/framework-bundle": "5.4.*",
         "symfony/mailer": "5.4.*",
+        "symfony/mercure-bundle": "^0.3.4",
         "symfony/property-access": "5.4.*",
         "symfony/property-info": "5.4.*",
         "symfony/proxy-manager-bridge": "5.4.*",
