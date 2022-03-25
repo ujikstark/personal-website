@@ -48,6 +48,10 @@ class UserFixtures extends Fixture
 
         for ($i = 0; $i < 10; $i++) {
             $user = new User();
+
+            if (9 === $i) {
+                $user->setId(Uuid::fromString(self::USER_WITH_NO_CONVERSATION));
+            }
             
             $password = $this->hasher->hashPassword($user, self::DEFAULT_PASSWORD);
 
