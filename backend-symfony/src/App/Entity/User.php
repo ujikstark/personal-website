@@ -118,11 +118,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $resetPasswordExpirationDate = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Participant::class, orphanRemoval: true)]
+    private Collection $participants;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->id = Uuid::v4();
         $this->todos = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -318,5 +322,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->resetPasswordExpirationDate = null;
         $this->resetPasswordToken = null;
+    }
+
+    /** @return Collection<int, Participant> */
+    public function getParticipants(): Collection
+    {
+        return $this->participants;
     }
 }
