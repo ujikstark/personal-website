@@ -2,20 +2,47 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ConversationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\Uid\Uuid;
 
+
 #[ORM\Entity(repositoryClass: ConversationRepository::class)]
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => [
+                'groups' => Conversation::READ_COLLECTION_GROUP
+            ]
+        ],
+    ],
+    itemOperations: [
+        'get'
+    ],
+    formats: ['json']
+)]
 class Conversation
 {
+    public const READ_COLLECTION_GROUP = 'conversation:read:collection';
+    public const READ_ITEM_GROUP = 'conversation:read:item';
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
+    #[ApiProperty(identifier: true)]
+    #[Serializer\Groups(groups: [
+        Conversation::READ_COLLECTION_GROUP
+    ])]
     private Uuid $id;
-
+    
     #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: Participant::class, orphanRemoval: true)]
+    #[Serializer\Groups(groups: [
+        Conversation::READ_COLLECTION_GROUP
+    ])]
     private Collection $participants;
 
     #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: Message::class, orphanRemoval: true)]

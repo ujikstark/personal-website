@@ -78,6 +78,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             'get_users',
             'get_user',
             'get_me',
+            Conversation::READ_COLLECTION_GROUP
         ])
     ]
     private Uuid $id;

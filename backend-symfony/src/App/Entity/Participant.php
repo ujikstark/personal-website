@@ -15,10 +15,16 @@ class Participant
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
+    #[Serializer\Groups(groups: [
+        Conversation::READ_COLLECTION_GROUP
+    ])]
     private Uuid $id;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'participants')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Serializer\Groups(groups: [
+        Conversation::READ_COLLECTION_GROUP
+    ])]
     private User $user;
 
     #[ORM\ManyToOne(targetEntity: Conversation::class, inversedBy: 'participants')]
