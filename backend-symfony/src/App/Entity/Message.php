@@ -45,16 +45,34 @@ class Message
 
     #[ORM\ManyToOne(targetEntity: Participant::class, inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Serializer\Groups(groups: [
+        Conversation::READ_COLLECTION_GROUP,
+        Conversation::READ_ITEM_GROUP,
+        Message::CREATE_GROUP,
+    ])]
     private Participant $sender;
 
     #[ORM\ManyToOne(targetEntity: Conversation::class, inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Serializer\Groups(groups: [
+        Message::CREATE_GROUP,
+    ])]
     private Conversation $conversation;
     
     #[ORM\Column(type: 'text')]
+    #[Serializer\Groups(groups: [
+        Conversation::READ_COLLECTION_GROUP,
+        Conversation::READ_ITEM_GROUP,
+        Message::CREATE_GROUP,
+    ])]
     private string $content = '';
 
     #[ORM\Column]
+    #[Serializer\Groups(groups: [
+        Conversation::READ_COLLECTION_GROUP,
+        Conversation::READ_ITEM_GROUP,
+        Message::CREATE_GROUP,
+    ])]
     private \DateTimeImmutable $date;
 
     public function __construct()
