@@ -97,10 +97,10 @@ class Conversation
         return $this;
     }
 
-    public function hasUser(string $userId): bool
+    public function hasUser(User $user): bool
     {
         foreach ($this->participants as $participant) {
-            if ((string) $participant->getUser()->getId() === $userId) {
+            if ($participant->getUser() === $user) {
                 return true;
             }
         }
