@@ -2,14 +2,34 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Action\NotFoundAction;
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\MessageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Model\Messaging\CreateMessageDTO;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
-
+#[ApiResource(
+    collectionOperations: [
+        'post' => [
+            'input' => CreateMessageDTO::class,
+            'normalization_context' => [
+                'groups' => Message::CREATE_GROUP
+            ],
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'controller' => NotFoundAction::class,
+            'read' => false,
+            'output' => false,
+        ],
+    ],
+    formats: ['json']
+)]
 class Message
 {
     public const CREATE_GROUP = 'message:create';
