@@ -6,6 +6,7 @@ namespace Domain\Messaging\Constraint;
 
 use Symfony\Component\Validator\Constraint;
 
+#[\Attribute]
 class ConversationCreation extends Constraint
 {
     public string $selfConversationMessage = 'A conversation cannot be created with yourself.';

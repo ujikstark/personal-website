@@ -97,6 +97,17 @@ class Conversation
         return $this;
     }
 
+    public function getParticipantByUser(User $user): ?Participant
+    {
+        foreach ($this->participants as $participant) {
+            if ($participant->getUser() === $user) {
+                return $participant;
+            }
+        }
+
+        return null;
+    }
+
     public function hasUser(User $user): bool
     {
         foreach ($this->participants as $participant) {

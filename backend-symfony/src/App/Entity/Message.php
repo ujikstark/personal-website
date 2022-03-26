@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\MessageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
@@ -15,6 +16,11 @@ class Message
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
+    #[Serializer\Groups(groups: [
+        Conversation::READ_COLLECTION_GROUP,
+        Conversation::READ_ITEM_GROUP,
+        Message::CREATE_GROUP,
+    ])]
     private $id;
 
     #[ORM\ManyToOne(targetEntity: Participant::class, inversedBy: 'messages')]
