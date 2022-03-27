@@ -6,10 +6,10 @@ namespace Domain\Messaging\Constraint;
 
 use App\Entity\User;
 use App\Repository\ConversationRepository;
-use Symfony\Component\HttpFoundation\File\Exception\UnexpectedTypeException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class MessageCreationValidator extends ConstraintValidator
 {

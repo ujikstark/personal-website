@@ -331,4 +331,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->participants;
     }
+
+    //For tests purposes
+    public function addParticipant(Participant $participant): self
+    {
+        if (!$this->participants->contains($participant)) {
+            $this->participants[] = $participant;
+            $participant->setUser($this);
+        }
+
+        return $this;
+    }
 }
