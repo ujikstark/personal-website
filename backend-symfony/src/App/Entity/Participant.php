@@ -19,6 +19,10 @@ class Participant
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'participants')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Serializer\Groups(groups: [
+        Conversation::READ_COLLECTION_GROUP,
+        Conversation::READ_ITEM_GROUP,
+    ])]
     private User $user;
 
     #[ORM\ManyToOne(targetEntity: Conversation::class, inversedBy: 'participants')]

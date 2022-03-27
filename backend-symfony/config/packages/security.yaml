@@ -48,6 +48,16 @@ security:
             methods: [POST, GET]
             stateless: true
             jwt: ~
+        conversations:
+            pattern: ^/api/conversations
+            methods: [POST, GET]
+            stateless: true
+            jwt: ~
+        messages:
+            pattern: ^/api/messages
+            methods: [POST]
+            stateless: true
+            jwt: ~
         main:
             lazy: true
             provider: app_user_provider
@@ -66,7 +76,8 @@ security:
         - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY, methods: [DELETE, GET] }
         - { path: ^/api/todos, roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PUT, DELETE] }
         - { path: ^/api/account, roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PUT, DELETE] }
-
+        - { path: ^/api/conversations, roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST] }
+        - { path: ^/api/messages, roles: IS_AUTHENTICATED_FULLY, methods: [POST] }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:

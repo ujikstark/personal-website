@@ -78,6 +78,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             'get_users',
             'get_user',
             'get_me',
+            Conversation::READ_COLLECTION_GROUP,
+            Conversation::READ_ITEM_GROUP
         ])
     ]
     private Uuid $id;
@@ -328,5 +330,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getParticipants(): Collection
     {
         return $this->participants;
+    }
+
+    //For tests purposes
+    public function addParticipant(Participant $participant): self
+    {
+        if (!$this->participants->contains($participant)) {
+            $this->participants[] = $participant;
+            $participant->setUser($this);
+        }
+
+        return $this;
     }
 }
