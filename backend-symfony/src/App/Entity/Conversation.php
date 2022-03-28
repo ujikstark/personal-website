@@ -7,6 +7,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ConversationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Model\Messaging\CreateConversationDTO;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -42,18 +43,23 @@ class Conversation
     #[ORM\Column(type: 'uuid')]
     #[ApiProperty(identifier: true)]
     #[Serializer\Groups(groups: [
-        Conversation::READ_COLLECTION_GROUP
+        Conversation::READ_COLLECTION_GROUP,
+        Conversation::READ_ITEM_GROUP,
+        Message::CREATE_GROUP,
     ])]
     private Uuid $id;
     
     #[ORM\OneToMany(mappedBy: 'conversation', cascade: ['PERSIST'], targetEntity: Participant::class, orphanRemoval: true)]
     #[Serializer\Groups(groups: [
-        Conversation::READ_COLLECTION_GROUP
+        Conversation::READ_COLLECTION_GROUP,
+        Conversation::READ_ITEM_GROUP,
     ])]
     private Collection $participants;
 
     #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: Message::class, orphanRemoval: true)]
-    private Collection $messages; 
+    #[ORM\OrderBy(['date' => Criteria::ASC])]
+    #[Serializer\Groups(groups: [Conversation::READ_ITEM_GROUP])]
+    private Collection $messages;
 
     public function __construct()
     {
@@ -88,6 +94,17 @@ class Conversation
         }
 
         return $this;
+    }
+
+    public function getOtherParticipant(User $user): ?Participant
+    {
+        foreach ($this->participants as $participant) {
+            if ($participant->getUser() !== $user) {
+                return $participant;
+            }
+        }
+
+        return null;
     }
 
     public function removeParticipant(Participant $participant): self

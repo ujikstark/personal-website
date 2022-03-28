@@ -79,7 +79,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             'get_user',
             'get_me',
             Conversation::READ_COLLECTION_GROUP,
-            Conversation::READ_ITEM_GROUP
+            Conversation::READ_ITEM_GROUP,
+            Message::CREATE_GROUP,
         ])
     ]
     private Uuid $id;
@@ -95,7 +96,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[
         ORM\Column(type: 'string', length: 100),
-        Serializer\Groups(groups: ['get_me', 'get_user'])
+        Serializer\Groups(groups: [
+            'get_me', 
+            'get_user',
+            Conversation::READ_COLLECTION_GROUP,
+            Conversation::READ_ITEM_GROUP,
+        ])
     ]
     private $name;
 
