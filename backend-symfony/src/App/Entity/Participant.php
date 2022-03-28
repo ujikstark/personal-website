@@ -22,6 +22,7 @@ class Participant
     #[Serializer\Groups(groups: [
         Conversation::READ_COLLECTION_GROUP,
         Conversation::READ_ITEM_GROUP,
+        Message::CREATE_GROUP,
     ])]
     private User $user;
 
