@@ -30,7 +30,11 @@ use Symfony\Component\Uid\Uuid;
         ]
     ],
     itemOperations: [
-        'get'
+        'get' => [
+            'normalization_context' => [
+                'groups' => Conversation::READ_ITEM_GROUP
+            ]
+        ]
     ],
     formats: ['json']
 )]
