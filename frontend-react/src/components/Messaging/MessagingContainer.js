@@ -3,6 +3,7 @@ import { Container } from "react-bootstrap";
 import { useAuth } from "../../contexts/AuthContext";
 import SigninModal from "../SigninModal";
 import SignupModal from "../SignupModal";
+import ConversationTabs from "./ConversationTabs";
 
 function MessagingContainer () {
     const auth = useAuth();
@@ -18,6 +19,12 @@ function MessagingContainer () {
             </div>
         </Container>
     }
+
+    return (
+        <Container style={{ height: 'calc(100vh - 66px)' }} className="p-0 shadow border rounded">
+            <ConversationTabs/>
+        </Container>
+    );
 }
 
 export default MessagingContainer;
