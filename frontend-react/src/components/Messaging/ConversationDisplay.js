@@ -11,6 +11,7 @@ function ConversationDisplay ({ user, conversation, setShowMessages, conversatio
     const [eventSource, setEventSource] = useState(null);
     const auth = useAuth();
     const updateAuth = useAuthUpdate();
+    const divRef = useRef();
 
     useEffect(() => {
         (async () => {
