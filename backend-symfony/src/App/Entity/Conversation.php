@@ -30,7 +30,11 @@ use Symfony\Component\Uid\Uuid;
         ]
     ],
     itemOperations: [
-        'get'
+        'get' => [
+            'normalization_context' => [
+                'groups' => Conversation::READ_ITEM_GROUP
+            ]
+        ]
     ],
     formats: ['json']
 )]
@@ -58,8 +62,11 @@ class Conversation
 
     #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: Message::class, orphanRemoval: true)]
     #[ORM\OrderBy(['date' => Criteria::ASC])]
-    #[Serializer\Groups(groups: [Conversation::READ_ITEM_GROUP])]
+    #[Serializer\Groups(groups: [
+        Conversation::READ_ITEM_GROUP,
+    ])]
     private Collection $messages;
+    
 
     public function __construct()
     {
@@ -135,9 +142,8 @@ class Conversation
 
         return false;
     }
-
     /** @return Collection<int, Message> */
-    public function getMessage(): Collection
+    public function getMessages(): Collection
     {
         return $this->messages;
     }
