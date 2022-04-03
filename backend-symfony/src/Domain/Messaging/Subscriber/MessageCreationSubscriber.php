@@ -10,6 +10,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Mercure\Discovery;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -36,19 +37,24 @@ class MessageCreationSubscriber implements EventSubscriberInterface
     {
         $message = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
-
+        
+        
         if (!$message instanceof Message || Request::METHOD_POST !== $method) {
             return;
         }
 
+
+        
         $this->hub->publish(new Update(
             $this->router->generate(
                 'api_conversations_get_item',
                 ['id' => (string) $message->getConversation()->getId()],
                 UrlGeneratorInterface::ABSOLUTE_URL, 
             ),
-            $this->serialize->serialize($message, 'json', ['groups' => Message::CREATE_GROUP]),
+            json_encode(['message' => 'success'])
         ));
+
+
 
 
     }

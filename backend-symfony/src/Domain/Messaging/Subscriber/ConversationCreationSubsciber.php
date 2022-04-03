@@ -49,14 +49,14 @@ class ConversationCreationSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->hub->publish(new Update(
-            $this->router->generate(
-                'api_users_get_item',
-                ['id' => (string) $otherParticipant->getUser()->getId()],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            ),
-            $this->serializer->serialize($conversation, 'json', ['groups' => Conversation::READ_ITEM_GROUP]),
-        ));
+        // $this->hub->publish(new Update(
+        //     $this->router->generate(
+        //         'api_users_get_item',
+        //         ['id' => (string) $otherParticipant->getUser()->getId()],
+        //         UrlGeneratorInterface::ABSOLUTE_URL
+        //     ),
+        //     $this->serializer->serialize($conversation, 'json', ['groups' => Conversation::READ_ITEM_GROUP]),
+        // ));
     }
 
 

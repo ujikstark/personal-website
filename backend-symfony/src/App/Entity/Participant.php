@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,6 +12,7 @@ use Symfony\Component\Uid\Uuid;
 
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
+#[ApiResource()]
 class Participant
 {
     #[ORM\Id]

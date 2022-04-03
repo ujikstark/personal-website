@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { getConversation } from "../../requests/messaging";
 import MessageBubble from "./MessageBubble";
 import ConversationHeader from "./ConversationHeader";
+import MessageInput from "./MessageInput";
 
 function ConversationDisplay ({ user, conversation, setShowMessages, conversations, setConversations }) {
     const [loading, setLoading] = useState(true);
@@ -12,7 +13,7 @@ function ConversationDisplay ({ user, conversation, setShowMessages, conversatio
     const auth = useAuth();
     const updateAuth = useAuthUpdate();
     const divRef = useRef();
-
+    
     useEffect(() => {
         (async () => {
             const fetchedConversation = await getConversation(conversation.id, auth, updateAuth);
@@ -33,15 +34,17 @@ function ConversationDisplay ({ user, conversation, setShowMessages, conversatio
         <>
             <ConversationHeader setShowMessages={setShowMessages} conversation={conversation} user={user}/>
             {!loading &&
-                <div className="pr-3 pl-3 d-flex flex-column">
-                {fullConversation.messages.map((message, index, array) => (
-                    renderMessageBubble(message, index, array)
-                ))}
-                </div>
+                <>
+                    <div className="pr-3 pl-3 d-flex flex-column">
+                    {fullConversation.messages.map((message, index, array) => (
+                        renderMessageBubble(message, index, array)
+                    ))}
+                    </div>
+                    <MessageInput conversations={conversations} setConversations={setConversations} fullConversation={fullConversation} setFullConversation={setFullConversation}/>
+                </>
             }
             
-            {/* <MessageInput conversations={conversations} setConversations={setConversations} fullConversation={fullConversation} setFullConversation={setFullConversation}/>
-            <div ref={divRef}/> */}
+            <div ref={divRef}/>
         </>
     );
 
