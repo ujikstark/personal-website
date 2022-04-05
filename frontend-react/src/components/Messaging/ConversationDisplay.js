@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAuth, useAuthUpdate } from "../../contexts/AuthContext";
 import PropTypes from 'prop-types';
-import { getConversation } from "../../requests/messaging";
+import { createMercureEventSource, getConversation } from "../../requests/messaging";
 import MessageBubble from "./MessageBubble";
 import ConversationHeader from "./ConversationHeader";
 import MessageInput from "./MessageInput";
@@ -12,7 +12,42 @@ function ConversationDisplay ({ user, conversation, setShowMessages, conversatio
     const [eventSource, setEventSource] = useState(null);
     const auth = useAuth();
     const updateAuth = useAuthUpdate();
+
     const divRef = useRef();
+
+    useEffect(() => {
+        divRef.current?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    useEffect(() => {
+        const newEventSource = eventSource ?? createMercureEventSource('http://localhost:8000/api/conversations/{id}');
+        newEventSource.onmessage = function (event) {
+          
+            const message = JSON.parse(event.data);
+
+            if (message.conversation.id === fullConversation.id) {
+                fullConversation.messages = [...fullConversation.messages, message];
+
+                setFullConversation(fullConversation);
+            }
+
+            const newConversations = conversations.map(conversation =>
+                conversation.id === message.conversation.id
+                    ? { ...conversation, lastMessage: message }
+                    : conversation);
+
+            newConversations.sort(function (c1, c2) {
+                if (c1.lastMessage === null) return 1;
+                if (c2.lastMessage === null) return -1;
+
+                return c2.lastMessage.date - c1.lastMessage.date;
+            });
+
+            setConversations(newConversations);
+        };
+
+        setEventSource(newEventSource);
+    }, [conversation, conversations]);
     
     useEffect(() => {
         (async () => {
@@ -38,13 +73,13 @@ function ConversationDisplay ({ user, conversation, setShowMessages, conversatio
                     <div className="pr-3 pl-3 d-flex flex-column">
                     {fullConversation.messages.map((message, index, array) => (
                         renderMessageBubble(message, index, array)
-                    ))}
+                        ))}
                     </div>
                     <MessageInput conversations={conversations} setConversations={setConversations} fullConversation={fullConversation} setFullConversation={setFullConversation}/>
                 </>
             }
-            
             <div ref={divRef}/>
+            
         </>
     );
 

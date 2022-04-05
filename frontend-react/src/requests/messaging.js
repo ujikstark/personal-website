@@ -37,3 +37,11 @@ export async function createMessage (conversationId, content, auth, updateAuth) 
         .then(response => response.data)
         .catch(() => null);
 }
+
+export function createMercureEventSource (topic) {
+    const hub = new URL('http://localhost/.well-known/mercure', window.origin);
+    hub.searchParams.append('topic', topic);
+    return new EventSource(hub, {
+        withCredentials: true
+    });
+}

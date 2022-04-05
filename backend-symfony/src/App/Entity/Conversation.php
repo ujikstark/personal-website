@@ -37,7 +37,6 @@ use Symfony\Component\Uid\Uuid;
         ]
     ],
     formats: ['json'],
-    // mercure: true
 )]
 class Conversation
 {

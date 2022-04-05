@@ -29,7 +29,6 @@ use Symfony\Component\Serializer\Annotation as Serializer;
         ],
     ],
     formats: ['json'],
-    // mercure: true
 )]
 class Message
 {

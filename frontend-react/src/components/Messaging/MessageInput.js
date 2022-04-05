@@ -25,8 +25,6 @@ function MessageInput ({ fullConversation, setFullConversation, conversations, s
 
         inputRef.current.value = '';
 
-        console.log(fullConversation.id);
-
         const message = await createMessage(fullConversation.id, content, auth, updateAuth);
 
         const newConversation = fullConversation;

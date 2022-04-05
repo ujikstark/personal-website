@@ -43,15 +43,29 @@ class MessageCreationSubscriber implements EventSubscriberInterface
             return;
         }
 
+        $user = $message->getSender()->getUser();
+        $otherParticipant = $message->getConversation()->getOtherParticipant($user);
+
+        $conversationTopic = $this->router->generate(
+            name: 'api_conversations_get_item',
+            parameters: ['id' => $message->getConversation()->getId()],
+            referenceType: UrlGeneratorInterface::ABSOLUTE_URL,
+        );
+
+        $userTopic = $this->router->generate(
+            'api_users_get_item',
+            [
+                'id' => $otherParticipant->getUser()->getId(),
+                'topic' => urlencode($conversationTopic),
+            ],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
 
         
         $this->hub->publish(new Update(
-            $this->router->generate(
-                'api_conversations_get_item',
-                ['id' => (string) $message->getConversation()->getId()],
-                UrlGeneratorInterface::ABSOLUTE_URL, 
-            ),
-            json_encode(['message' => 'success'])
+            [$conversationTopic, $userTopic],
+            $this->serializer->serialize($message, 'json', ['groups' => Message::CREATE_GROUP]),
+            true
         ));
 
 
