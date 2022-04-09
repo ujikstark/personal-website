@@ -45,19 +45,31 @@ class ConversationCreationSubscriber implements EventSubscriberInterface
         }
 
         /** @var User $user */
-        if (null === $otherParticipant = $conversation->getOtherParticipant($user)) {
+        $user = $this->security->getUser();
+        $otherParticipant = $conversation->getOtherParticipant($user);
+
+        if (null === $otherParticipant) {
             return;
         }
 
+        // $conversationTopic = $this->router->generate(
+        //     name: 'api_conversations_get_collection',
+        //     referenceType: UrlGeneratorInterface::ABSOLUTE_URL,
+        // );
+
+        // $userTopic = $this->router->generate(
+        //     'api_users_get_item',
+        //     [
+        //         'id' => $otherParticipant->getUser()->getId(),
+        //         'topic' => urlencode($conversationTopic),
+        //     ],
+        //     UrlGeneratorInterface::ABSOLUTE_URL
+        // );
+
         // $this->hub->publish(new Update(
-        //     $this->router->generate(
-        //         'api_users_get_item',
-        //         ['id' => (string) $otherParticipant->getUser()->getId()],
-        //         UrlGeneratorInterface::ABSOLUTE_URL
-        //     ),
+        //     [$conversationTopic, $userTopic],
         //     $this->serializer->serialize($conversation, 'json', ['groups' => Conversation::READ_ITEM_GROUP]),
+        //     true
         // ));
     }
-
-
 }

@@ -45,6 +45,10 @@ class GetConversationCollectionSubscriber implements EventSubscriberInterface
             ['id' => $user->getId()],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
+        // $this->authorization->setCookie(
+        //     $request,
+        //     [sprintf('%s%s', $userUrl, '?with=conversations')],
+        // );
         $this->authorization->setCookie(
             $request,
             [sprintf('%s%s', $userUrl, '{?topic}')],

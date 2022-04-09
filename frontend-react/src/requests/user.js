@@ -62,6 +62,14 @@ export async function updatePasswordSubmit (values, auth, updateAuth) {
         })
 }
 
+export async function getUser (id, auth, updateAuth) {
+    await refreshToken(auth, updateAuth);
+
+    return await axios.get('/api/users/' + id)
+        .then(response => response.data)
+        .catch(() => null);
+}
+
 export async function getMe () {
     const user = await axios.get('/api/account/me')
         .then(response => {

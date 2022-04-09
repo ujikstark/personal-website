@@ -6,6 +6,7 @@ namespace Domain\Messaging\DataProvider;
 
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
+use App\Entity\Conversation;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Security;
 
@@ -13,10 +14,10 @@ class ConversationCollectionDataProvider implements CollectionDataProviderInterf
 {
     public function __construct(
         private Security $security
-    ) {    
+    ) {
     }
 
-    public function getCollection(string $resourceClass, ?string $operationName = null)
+    public function getCollection(string $resourceClass, string $operationName = null): array
     {
         /** @var User $user */
         $user = $this->security->getUser();
@@ -27,10 +28,9 @@ class ConversationCollectionDataProvider implements CollectionDataProviderInterf
         }
 
         return $conversations;
-        
     }
 
-    public function supports(string $resourceClass, ?string $operationName = null, array $context = []): bool
+    public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
         return Conversation::class === $resourceClass;
     }

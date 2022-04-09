@@ -4,10 +4,10 @@ import { useEffect, useRef } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useAuth, useAuthUpdate } from "../../contexts/AuthContext";
 import PropTypes from 'prop-types';
-import { createMessage } from "../../requests/messaging";
+import { createConversation, createMessage } from "../../requests/messaging";
 
 
-function MessageInput ({ fullConversation, setFullConversation, conversations, setConversations }) {
+function MessageInput ({ tempConversation, setTempConversation, fullConversation, setFullConversation, conversations, setConversations }) {
     const auth = useAuth();
     const updateAuth = useAuthUpdate();
 
@@ -25,17 +25,29 @@ function MessageInput ({ fullConversation, setFullConversation, conversations, s
 
         inputRef.current.value = '';
 
-        const message = await createMessage(fullConversation.id, content, auth, updateAuth);
+        let newConversation, message;
 
-        const newConversation = fullConversation;
-        newConversation.messages = [...fullConversation.messages, message];
+        if (tempConversation.length != 0) {
+            newConversation = await createConversation(tempConversation.participants[0].user.id, auth, updateAuth);
+            message = await createMessage(newConversation.id, content, auth, updateAuth);
+            
+            // must be fix
+            newConversation.messages = [message];
+        } else {
+            message = await createMessage(fullConversation.id, content, auth, updateAuth);
+            newConversation = fullConversation;
+            newConversation.messages = [...fullConversation.messages, message];
+        }
 
+        
+        console.log(newConversation);
         setFullConversation(newConversation);
 
         const newConversations = conversations.filter(conversation => conversation.id !== newConversation.id);
         newConversation.lastMessage = message;
 
         setConversations([newConversation, ...newConversations]);
+        setTempConversation([]);
     }
 
     return (
@@ -66,25 +78,6 @@ MessageInput.propTypes = {
     setConversations: PropTypes.func,
     setFullConversation: PropTypes.func,
     conversations: PropTypes.array,
-    fullConversation: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        participants: PropTypes.arrayOf(PropTypes.shape({
-            user: PropTypes.shape({
-                id: PropTypes.string.isRequired,
-                name: PropTypes.string.isRequired
-            }).isRequired
-        })).isRequired,
-        messages: PropTypes.arrayOf(PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            date: PropTypes.string.isRequired,
-            content: PropTypes.string.isRequired,
-            sender: PropTypes.shape({
-                user: PropTypes.shape({
-                    id: PropTypes.string.isRequired
-                }).isRequired
-            }).isRequired
-        }))
-    })
 };
 
 export default MessageInput;

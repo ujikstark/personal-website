@@ -165,7 +165,10 @@ class Conversation
         return $this;
     }
 
-    #[Serializer\Groups(groups: [Conversation::READ_COLLECTION_GROUP])]
+    #[Serializer\Groups(groups: [
+        Conversation::READ_COLLECTION_GROUP,
+        Conversation::READ_ITEM_GROUP
+    ])]
     public function getLastMessage(): ?Message
     {
         $message = $this->messages->last();

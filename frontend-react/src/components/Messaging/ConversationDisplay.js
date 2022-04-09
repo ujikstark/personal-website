@@ -6,7 +6,7 @@ import MessageBubble from "./MessageBubble";
 import ConversationHeader from "./ConversationHeader";
 import MessageInput from "./MessageInput";
 
-function ConversationDisplay ({ user, conversation, setShowMessages, conversations, setConversations }) {
+function ConversationDisplay ({ user, conversation, setShowMessages, conversations, setConversations, tempConversation, setTempConversation }) {
     const [loading, setLoading] = useState(true);
     const [fullConversation, setFullConversation] = useState({});
     const [eventSource, setEventSource] = useState(null);
@@ -20,7 +20,9 @@ function ConversationDisplay ({ user, conversation, setShowMessages, conversatio
     });
 
     useEffect(() => {
+        // const newEventSource = eventSource ?? createMercureEventSource('http://localhost:8000/api/users/'+user.id+'?with=conversations');
         const newEventSource = eventSource ?? createMercureEventSource('http://localhost:8000/api/conversations/{id}');
+
         newEventSource.onmessage = function (event) {
           
             const message = JSON.parse(event.data);
@@ -46,18 +48,28 @@ function ConversationDisplay ({ user, conversation, setShowMessages, conversatio
             setConversations(newConversations);
         };
 
+        newEventSource.onerror = () => {
+            newEventSource.close();
+        }
+
+
         setEventSource(newEventSource);
     }, [conversation, conversations]);
     
     useEffect(() => {
         (async () => {
-            const fetchedConversation = await getConversation(conversation.id, auth, updateAuth);
-            setFullConversation(fetchedConversation);
-            setLoading(false);
+            if (fullConversation.id != conversation.id) {
+                const fetchedConversation = await getConversation(conversation.id, auth, updateAuth);
+                setFullConversation(fetchedConversation);
+                setLoading(false);
+            }
+
+            
         })();
 
+
         return () => setLoading(false);
-    }, [auth, updateAuth]);
+    }, [auth, updateAuth, fullConversation]);
 
 
     const renderMessageBubble = (message, index, array) => {
@@ -68,16 +80,22 @@ function ConversationDisplay ({ user, conversation, setShowMessages, conversatio
     return (
         <>
             <ConversationHeader setShowMessages={setShowMessages} conversation={conversation} user={user}/>
-            {!loading &&
+            {fullConversation != null && !loading ?
+    
                 <>
                     <div className="pr-3 pl-3 d-flex flex-column">
                     {fullConversation.messages.map((message, index, array) => (
                         renderMessageBubble(message, index, array)
                         ))}
                     </div>
-                    <MessageInput conversations={conversations} setConversations={setConversations} fullConversation={fullConversation} setFullConversation={setFullConversation}/>
+                    <MessageInput setTempConversation={setTempConversation} tempConversation={tempConversation} conversations={conversations} setConversations={setConversations} fullConversation={fullConversation} setFullConversation={setFullConversation}/>
+                </>
+                : 
+                <>
+                    <MessageInput setTempConversation={setTempConversation}tempConversation={tempConversation} conversations={conversations} setConversations={setConversations} fullConversation={fullConversation} setFullConversation={setFullConversation}/>
                 </>
             }
+            
             <div ref={divRef}/>
             
         </>
