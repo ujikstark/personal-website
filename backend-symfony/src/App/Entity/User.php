@@ -38,7 +38,11 @@ use Symfony\Component\Uid\Uuid;
             ],
         ],
         itemOperations: [
-            'get',
+            'get' => [
+                'normalization_context' => [
+                    'groups' => ['get_user']
+                ]
+            ],
             'delete',
             'getMe' => [
                 'method' => Request::METHOD_GET,

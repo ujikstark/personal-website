@@ -21,7 +21,7 @@ class CreateMessageDTO
         return $this->conversationId;
     }
 
-    public function setConversation(string $conversationId): void
+    public function setConversationId(string $conversationId): void
     {
         $this->conversationId = $conversationId;
     }

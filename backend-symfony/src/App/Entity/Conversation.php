@@ -36,7 +36,7 @@ use Symfony\Component\Uid\Uuid;
             ]
         ]
     ],
-    formats: ['json']
+    formats: ['json'],
 )]
 class Conversation
 {
@@ -62,8 +62,11 @@ class Conversation
 
     #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: Message::class, orphanRemoval: true)]
     #[ORM\OrderBy(['date' => Criteria::ASC])]
-    #[Serializer\Groups(groups: [Conversation::READ_ITEM_GROUP])]
+    #[Serializer\Groups(groups: [
+        Conversation::READ_ITEM_GROUP,
+    ])]
     private Collection $messages;
+    
 
     public function __construct()
     {
@@ -139,9 +142,8 @@ class Conversation
 
         return false;
     }
-
     /** @return Collection<int, Message> */
-    public function getMessage(): Collection
+    public function getMessages(): Collection
     {
         return $this->messages;
     }
@@ -163,7 +165,10 @@ class Conversation
         return $this;
     }
 
-    #[Serializer\Groups(groups: [Conversation::READ_COLLECTION_GROUP])]
+    #[Serializer\Groups(groups: [
+        Conversation::READ_COLLECTION_GROUP,
+        Conversation::READ_ITEM_GROUP
+    ])]
     public function getLastMessage(): ?Message
     {
         $message = $this->messages->last();

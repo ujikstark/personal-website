@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
             'output' => false,
         ],
     ],
-    formats: ['json']
+    formats: ['json'],
 )]
 class Message
 {

@@ -26,6 +26,8 @@ function SigninModal () {
     const handleCancel = () => {
         setInError(false);
         clearAll();
+
+        setModal(!modal);
     }
 
     const handleSigninSubmit = async () => {
