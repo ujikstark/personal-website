@@ -1,9 +1,9 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, Col, Nav, Row, Tab } from "react-bootstrap";
 import { useAuth, useAuthUpdate } from "../../contexts/AuthContext";
-import { createMercureEventSource, getConversations } from "../../requests/messaging";
+import { createMercureEventSource, getConversation, getConversations } from "../../requests/messaging";
 import ConversationTab from "./ConversationTab";
 import PropTypes from 'prop-types';
 import ConversationDisplay from "./ConversationDisplay";
@@ -19,7 +19,12 @@ function ConversationTabs () {
     const [showMessages, setShowMessages] = useState(false);
     const [isMobile] = useState(Number(window.innerWidth) < 768);
     const [eventSource, setEventSource] = useState(null);
+    const [anotherEventSource, setAnotherEventSource] = useState(null);
+
     const [tempConversation, setTempConversation] = useState([]);
+    const [newMessages, setNewMessages] = useState({});
+    const [loading, setLoading] = useState(true);
+    const conversationsLocal = JSON.parse(localStorage.getItem('conversations'));
 
 
     useEffect(() => {
@@ -27,11 +32,10 @@ function ConversationTabs () {
         newEventSource.onmessage = function (event) {
             const newConversation = JSON.parse(event.data);
             let isCurrentConversation = false;
-            for (let i = 0; i < conversations.length; i++) {
-                if (conversations[i].id == newConversation.id) {
+                if (conversationsLocal.hasOwnProperty(newConversation.id)) 
                     isCurrentConversation = true;
-                }
-            }
+              
+            
             if (isCurrentConversation) {
                 const newConversations = conversations.map(conversation =>
                     conversation.id === newConversation.id
@@ -43,18 +47,48 @@ function ConversationTabs () {
                         if (c2.lastMessage === null) return -1;
                         
                         return c2.lastMessage.date - c1.lastMessage.date;
-                    });
-                    
+                    });                    
                     setConversations(newConversations);
-                } else {
-                setConversations([newConversation, ...conversations]);
+                
+            } else {
+                
+                setConversations([...conversations, newConversation]);
             }
+            
+        };
+
+        const newAnotherEventSource = anotherEventSource ?? createMercureEventSource('http://localhost:8000/api/conversations/{id}');
+
+        newAnotherEventSource.onmessage = function (event) {
+            
+            const message = JSON.parse(event.data);
+            let isRightConversation = false;
+            for (let i = 0; i < conversations.length; i++) {
+                if (conversations[i].id == message.conversation.id) {
+                    isRightConversation = true;
+                }
+            }
+
+            if (isRightConversation) {
+                
+                    conversationsLocal[message.conversation.id] = [];
+                    conversationsLocal[message.conversation.id].push(message);
+                    setNewMessages(conversationsLocal);
+                // }
+
+            } 
+
 
         };
 
+        
+        
         setEventSource(newEventSource);
+        setAnotherEventSource(newAnotherEventSource);
+
     }, [conversations]);
 
+    
 
     useEffect(() => {
         (async () => {
@@ -62,17 +96,33 @@ function ConversationTabs () {
             currentConversations.sort(function (c1, c2) {
                 if (c1.lastMessage === null) return 1;
                 if (c2.lastMessage === null) return -1;
-
+                
                 const date1 = new Date(c1.lastMessage.date).getTime();
                 const date2 = new Date(c2.lastMessage.date).getTime();
-
+                
                 return date2 - date1;
             });
+
+            let newM = {};
+
+            for (let i = 0; i < currentConversations.length; i++) {
+                newM[currentConversations[i].id] = [];
+            }
+            
+            localStorage.setItem('conversations', JSON.stringify(newM));
+
             setConversations(currentConversations);
+            setNewMessages(newM);
+
+            setLoading(false);  
         })();
+             
+        
+        
+        return () => setLoading(false);
+
 
     }, [auth, updateAuth]);
-
 
     if (conversations.length === 0) {
         return <div className="border-bottom p-2">
@@ -87,6 +137,7 @@ function ConversationTabs () {
             </Row>
         </div>;
     }
+
 
     return (
         <>
@@ -114,7 +165,7 @@ function ConversationTabs () {
                         {conversations.map((conversation) => (
                             <Tab.Content key={conversation.id}>
                                 <Tab.Pane eventKey={conversation.id}>
-                                    <ConversationDisplay setTempConversation={setTempConversation} tempConversation={tempConversation} conversations={conversations} setConversations={setConversations} setShowMessages={setShowMessages} conversation={conversation} user={user}/>
+                                    <ConversationDisplay newMessages={newMessages} setNewMessages={setNewMessages} setTempConversation={setTempConversation} tempConversation={tempConversation} conversations={conversations} setConversations={setConversations} setShowMessages={setShowMessages} conversation={conversation} user={user}/>
                                 </Tab.Pane>
                             </Tab.Content>
                         ))}

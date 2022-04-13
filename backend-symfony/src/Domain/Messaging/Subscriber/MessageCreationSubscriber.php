@@ -90,7 +90,7 @@ class MessageCreationSubscriber implements EventSubscriberInterface
 
         $this->hub->publish(new Update(
             [$conversationTopic, $userTopic],
-            $this->serializer->serialize($conversation, 'json', ['groups' => Conversation::READ_ITEM_GROUP]),
+            $this->serializer->serialize($conversation, 'json', ['groups' => Conversation::READ_COLLECTION_GROUP]),
             true
         ));
 

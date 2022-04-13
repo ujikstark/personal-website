@@ -6,70 +6,59 @@ import MessageBubble from "./MessageBubble";
 import ConversationHeader from "./ConversationHeader";
 import MessageInput from "./MessageInput";
 
-function ConversationDisplay ({ user, conversation, setShowMessages, conversations, setConversations, tempConversation, setTempConversation }) {
+function ConversationDisplay ({ user, conversation, setShowMessages, conversations, setConversations, tempConversation, setTempConversation, newMessages, setNewMessages }) {
     const [loading, setLoading] = useState(true);
-    const [fullConversation, setFullConversation] = useState({});
-    const [eventSource, setEventSource] = useState(null);
+    const [fullConversation, setFullConversation] = useState(conversation);
     const auth = useAuth();
     const updateAuth = useAuthUpdate();
+
 
     const divRef = useRef();
 
     useEffect(() => {
         divRef.current?.scrollIntoView({ behavior: 'smooth' });
     });
-
+    
     useEffect(() => {
-        // const newEventSource = eventSource ?? createMercureEventSource('http://localhost:8000/api/users/'+user.id+'?with=conversations');
-        const newEventSource = eventSource ?? createMercureEventSource('http://localhost:8000/api/conversations/{id}');
-
-        newEventSource.onmessage = function (event) {
-          
-            const message = JSON.parse(event.data);
-
-            if (message.conversation.id === fullConversation.id) {
-                fullConversation.messages = [...fullConversation.messages, message];
-
-                setFullConversation(fullConversation);
+        
+        if (!loading) {
+            if (typeof newMessages !== "undefined") {
+                if (newMessages.hasOwnProperty(fullConversation.id)) {
+                    if (newMessages[fullConversation.id].length) {
+                        let newFullConversation = fullConversation;
+                        newFullConversation.messages = newFullConversation.messages.concat(newMessages[fullConversation.id]);
+                        
+                        let newM = newMessages;
+                        newM[fullConversation.id] = [];
+                        
+                        setFullConversation(newFullConversation);
+                        setNewMessages(newM);
+                    } 
+                }
             }
 
-            const newConversations = conversations.map(conversation =>
-                conversation.id === message.conversation.id
-                    ? { ...conversation, lastMessage: message }
-                    : conversation);
-
-            newConversations.sort(function (c1, c2) {
-                if (c1.lastMessage === null) return 1;
-                if (c2.lastMessage === null) return -1;
-
-                return c2.lastMessage.date - c1.lastMessage.date;
-            });
-
-            setConversations(newConversations);
-        };
-
-        newEventSource.onerror = () => {
-            newEventSource.close();
         }
 
 
-        setEventSource(newEventSource);
-    }, [conversation, conversations]);
+    }, [newMessages]);
+
     
     useEffect(() => {
+
         (async () => {
-            if (fullConversation.id != conversation.id) {
+
+            if (conversation.id != tempConversation.id) {
+                
                 const fetchedConversation = await getConversation(conversation.id, auth, updateAuth);
+
                 setFullConversation(fetchedConversation);
                 setLoading(false);
-            }
-
+            }   
             
         })();
-
-
+        
         return () => setLoading(false);
-    }, [auth, updateAuth, fullConversation]);
+    }, [auth, updateAuth]);
 
 
     const renderMessageBubble = (message, index, array) => {
