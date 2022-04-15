@@ -9,6 +9,7 @@ import Todo from './pages/Todo';
 import Profile from './pages/Profile';
 import ResetPassword from './pages/ResetPassword';
 import Messaging from './pages/Messaging';
+import Resume from './pages/Resume';
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                     <Route path="/todo" element={<Todo/>}/>
                     <Route path="/me" element={<Profile/>}/>
                     <Route path="/reset-password/:token" element={<ResetPassword/>}/>
+                    <Route path="/resume" element={<Resume/>}/>
                     <Route path="/messaging" element={<Messaging/>}></Route>
                 </Routes>
             </AuthProvider>

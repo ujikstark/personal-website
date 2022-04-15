@@ -24,7 +24,7 @@ function ConversationTabs () {
     const [tempConversation, setTempConversation] = useState([]);
     const [newMessages, setNewMessages] = useState({});
     const [loading, setLoading] = useState(true);
-    const conversationsLocal = JSON.parse(localStorage.getItem('conversations'));
+    let conversationsLocal = JSON.parse(localStorage.getItem('conversations'));
 
 
     useEffect(() => {
@@ -72,9 +72,16 @@ function ConversationTabs () {
             if (isRightConversation) {
                 
                     conversationsLocal[message.conversation.id] = [];
-                    conversationsLocal[message.conversation.id].push(message);
                     setNewMessages(conversationsLocal);
-                // }
+                    
+                    // for testing new notif purpose
+                    // conversationsLocal = JSON.parse(localStorage.getItem('conversations'));
+                    // console.log(conversationsLocal);
+                    // conversationsLocal[message.conversation.id].messages.push(message);
+                    // let setConversation = conversationsLocal;
+                    // setConversation[message.conversation.id].messages = [];
+                    // setConversation[message.conversation.id].count += 1;                    
+                    // localStorage.setItem('conversations', JSON.stringify(conversationsLocal));
 
             } 
 
@@ -87,6 +94,14 @@ function ConversationTabs () {
         setAnotherEventSource(newAnotherEventSource);
 
     }, [conversations]);
+
+    useEffect(() => {
+    
+        const conversationsLocal = JSON.parse(localStorage.getItem('conversations'));
+        console.log(conversationsLocal);
+
+
+    }, [newMessages]);
 
     
 
@@ -106,10 +121,17 @@ function ConversationTabs () {
             let newM = {};
 
             for (let i = 0; i < currentConversations.length; i++) {
-                newM[currentConversations[i].id] = [];
+                newM[currentConversations[i].id] = {
+                    messages: [],
+                    count: 0,
+                };
+
+            }
+
+            if (conversationsLocal == null) {
+                localStorage.setItem('conversations', JSON.stringify(newM));
             }
             
-            localStorage.setItem('conversations', JSON.stringify(newM));
 
             setConversations(currentConversations);
             setNewMessages(newM);
@@ -117,12 +139,11 @@ function ConversationTabs () {
             setLoading(false);  
         })();
              
-        
-        
         return () => setLoading(false);
 
 
     }, [auth, updateAuth]);
+
 
     if (conversations.length === 0) {
         return <div className="border-bottom p-2">
@@ -154,12 +175,15 @@ function ConversationTabs () {
                                 <Col className="p-0"><hr/></Col>
                             </Row>
                         </div>
-                        <Nav onClick={() => setShowMessages(true)} variant="pills" className="flex-column flex-nowrap">
-                        {conversations.map((conversation) => (
-                                <ConversationTab key={conversation.id} user={user} conversation={conversation} tempConversation={tempConversation}/>
-                            )
-                            )}
-                        </Nav>
+                        {!loading &&
+                            <Nav onClick={() => setShowMessages(true)} variant="pills" className="flex-column flex-nowrap">
+                            {conversations.map((conversation) => (
+                                    <ConversationTab key={conversation.id} user={user} conversation={conversation} tempConversation={tempConversation} activeKey={activeKey}/>
+                                )
+                                )}
+                            </Nav>
+                        }
+                        
                     </Col>
                     <Col style={{ overflow: 'scroll'}} className={`p-0 h-100 ${(!isMobile || (isMobile && showMessages)) ? '' : 'd-none'}`} md={8}>
                         {conversations.map((conversation) => (

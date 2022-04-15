@@ -53,7 +53,7 @@ function SignupModal () {
 
     return (
         <>
-            <Navbar.Text onClick={toggleModal} className="btn btn-link" as="span">Sign up</Navbar.Text>
+            <Navbar.Text onClick={toggleModal} className="btn btn-link" as="span" style={{ textDecoration: 'none' }}>Sign up</Navbar.Text>
             <Modal size="md" show={modal} onHide={handleCancel}>
                 <Modal.Header closeButton>
                     <Modal.Title>Sign up</Modal.Title>

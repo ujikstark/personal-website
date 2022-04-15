@@ -1,17 +1,20 @@
 import React from "react";
-import { Card, Container } from "react-bootstrap";
+import { Col, Container, Row, Image, Button, Card } from "react-bootstrap";
 import { Helmet } from 'react-helmet';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope, faHome, faMapMarker } from "@fortawesome/free-solid-svg-icons";
+import img from '../assets/img';
 
 
 function Home() {
     return (
         <Container>
             <Helmet><title>Homepage</title></Helmet>
-            <h1 className="mt-2 mb-3">Homepage</h1>
-            <Card className="mt-4 m-2 pr-2 pl-2 shadow">
+            <h1 className="mt-3 mb-3">Homepage</h1>
+            <Card className="mt-4 m-2 pe-3 ps-3 shadow">
                 <Card.Body>
-                    <Card.Title className="mb-3">Welcome !</Card.Title>
-                    <div className="p text-start font-weight-light">
+                    <Card.Title className="mb-5">Welcome !</Card.Title>
+                    <div className="h5 text-start fw-normal">
                         <div className="mb-3">
                         This website has been developed for personal learning purposes on different front-end and back-end technologies. It is made of a React SPA and a Symfony API. The API documentation can be seen here. 
                         </div>        
@@ -20,10 +23,7 @@ function Home() {
                         </div>        
                         <div className="mb-3">
                         The full codebase is available on Github
-                        </div>
-                        <div>
-                        More details about the technical stack used in this application below.
-                        </div>        
+                        </div>   
                     </div>
                 </Card.Body>
             </Card>
