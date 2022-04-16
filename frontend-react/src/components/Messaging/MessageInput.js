@@ -29,18 +29,16 @@ function MessageInput ({ tempConversation, setTempConversation, fullConversation
 
         if (tempConversation.length != 0) {
             newConversation = await createConversation(tempConversation.participants[0].user.id, auth, updateAuth);
-            message = await createMessage(newConversation.id, content, auth, updateAuth);
-            
-            // must be fix
-            newConversation.messages = [message];
+            if (message = await createMessage(newConversation.id, content, auth, updateAuth)) {
+
+                newConversation.messages.push(message);
+            }
         } else {
             message = await createMessage(fullConversation.id, content, auth, updateAuth);
             newConversation = fullConversation;
             newConversation.messages = [...fullConversation.messages, message];
         }
 
-        
-        console.log(newConversation);
         setFullConversation(newConversation);
 
         const newConversations = conversations.filter(conversation => conversation.id !== newConversation.id);
@@ -52,7 +50,7 @@ function MessageInput ({ tempConversation, setTempConversation, fullConversation
 
     return (
         <div style={{ bottom: '0', zIndex: '5' }} className="mt-2 pt-2 pb-2 bg-white position-sticky">
-            <Form onSubmit={(e) => handleSubmit(e)}>
+            <Form onSubmit={ (e) => handleSubmit(e)}>
                 <Row className="m-0">
                     <Col className="m-0" xs={10}>
                         <Form.Group className="m-0">

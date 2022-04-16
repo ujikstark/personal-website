@@ -95,13 +95,6 @@ function ConversationTabs () {
 
     }, [conversations]);
 
-    useEffect(() => {
-    
-        const conversationsLocal = JSON.parse(localStorage.getItem('conversations'));
-        console.log(conversationsLocal);
-
-
-    }, [newMessages]);
 
     
 
@@ -148,7 +141,7 @@ function ConversationTabs () {
     if (conversations.length === 0) {
         return <div className="border-bottom p-2">
             <div>No conversation</div>
-            <CreateConversationModal tempConversation={tempConversation} setTempConversation={setTempConversation} setShowMessages={setShowMessages} setActiveKey={setActiveKey} conversations={conversations} setConversations={setConversations}/>
+            <CreateConversationModal user={user} tempConversation={tempConversation} setTempConversation={setTempConversation} setShowMessages={setShowMessages} setActiveKey={setActiveKey} conversations={conversations} setConversations={setConversations}/>
             <Row className="m-0">
                 <Col className="p-0"><hr/></Col>
                 <Col className="col-auto">
@@ -166,7 +159,7 @@ function ConversationTabs () {
                 <Row className="m-0 h-100">
                     <Col style={{ overflow: 'scroll'}} className={`p-0 h-100 border-end ${(!isMobile || (isMobile && !showMessages)) ? '' : 'd-none'}`} md={4}>
                         <div style={{ backgroundColor: 'azure' }} className="border-bottom pt-2 pb-2">
-                            <CreateConversationModal tempConversation={tempConversation} setTempConversation={setTempConversation} setShowMessages={setShowMessages} setActiveKey={setActiveKey} conversations={conversations} setConversations={setConversations}/>
+                            <CreateConversationModal user={user} tempConversation={tempConversation} setTempConversation={setTempConversation} setShowMessages={setShowMessages} setActiveKey={setActiveKey} conversations={conversations} setConversations={setConversations}/>
                             <Row className="m-0">
                                 <Col className="p-0"><hr/></Col>
                                 <Col className="col-auto">
@@ -186,6 +179,7 @@ function ConversationTabs () {
                         
                     </Col>
                     <Col style={{ overflow: 'scroll'}} className={`p-0 h-100 ${(!isMobile || (isMobile && showMessages)) ? '' : 'd-none'}`} md={8}>
+                        <div className="h-100" >
                         {conversations.map((conversation) => (
                             <Tab.Content key={conversation.id}>
                                 <Tab.Pane eventKey={conversation.id}>
@@ -193,6 +187,7 @@ function ConversationTabs () {
                                 </Tab.Pane>
                             </Tab.Content>
                         ))}
+                        </div>
 
                     </Col>
                 </Row>

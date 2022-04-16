@@ -5,6 +5,7 @@ import { createMercureEventSource, getConversation } from "../../requests/messag
 import MessageBubble from "./MessageBubble";
 import ConversationHeader from "./ConversationHeader";
 import MessageInput from "./MessageInput";
+import { Spinner } from "react-bootstrap";
 
 function ConversationDisplay ({ user, conversation, setShowMessages, conversations, setConversations, tempConversation, setTempConversation, newMessages, setNewMessages }) {
     const [loading, setLoading] = useState(true);
@@ -66,13 +67,19 @@ function ConversationDisplay ({ user, conversation, setShowMessages, conversatio
         return <MessageBubble key={index} user={user} previousMessage={previousMessage} message={message}/>;
     };
 
+    useEffect(() => {
+        
+        if (fullConversation.messages) setLoading(false);
+    }, [fullConversation.messages]);
+    
+
     return (
-        <>
+        <div className="h-100">
             <ConversationHeader setShowMessages={setShowMessages} conversation={conversation} user={user}/>
-            {fullConversation != null && !loading ?
+            {fullConversation != null  && !loading ?
     
                 <>
-                    <div className="pr-3 pl-3 d-flex flex-column">
+                    <div className="h-100 d-flex flex-column">
                     {fullConversation.messages.map((message, index, array) => (
                         renderMessageBubble(message, index, array)
                         ))}
@@ -87,7 +94,7 @@ function ConversationDisplay ({ user, conversation, setShowMessages, conversatio
             
             <div ref={divRef}/>
             
-        </>
+        </div>
     );
 
 

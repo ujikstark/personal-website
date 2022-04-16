@@ -9,7 +9,7 @@ import { useAuth, useAuthUpdate } from '../../contexts/AuthContext';
 import { createConversation } from '../../requests/messaging';
 import { getUser } from '../../requests/user';
 
-function CreateConversationModal ({ setShowMessages, conversations, setConversations, setActiveKey, setTempConversation }) {
+function CreateConversationModal ({ user, setShowMessages, conversations, setConversations, setActiveKey, setTempConversation }) {
     const [modal, setModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [inError, setInError] = useState(false);
@@ -36,20 +36,22 @@ function CreateConversationModal ({ setShowMessages, conversations, setConversat
         inputRef.current.value = '';
         setLoading(true);
         // const conversation = await createConversation(userId, auth, updateAuth);
-        const user = await getUser(userId, auth, updateAuth);
+        const newUser = await getUser(userId, auth, updateAuth);
         setLoading(false);
-        console.log(user);
 
-        if (user === null) {
+        if (newUser === null || user.id == userId) {
             setInError(true);
             setUserFound(null);
 
             return;
         }
 
+
+        
+
         // toggleModal();
         // setConversations([conversation, ...conversations]);
-        setUserFound(user);
+        setUserFound(newUser);
         setInError(false);
     };
 
@@ -63,11 +65,34 @@ function CreateConversationModal ({ setShowMessages, conversations, setConversat
                 }
             ]
         }
+        
 
-        setConversations([newConversation, ...conversations]);
-        setActiveKey(newConversation.id);
-        setTempConversation(newConversation);
-        toggleModal();
+        if (userFound) {
+            let isExist = false;
+            let conversationId;
+            conversations.forEach((value) => {
+                if (value.lastMessage)
+                    if (value.participants[0].user.id == userFound.id || value.participants[1].user.id == userFound.id) {
+                        isExist = true;
+                        conversationId = value.id;
+                    }
+            })
+
+            if (isExist) {
+                setActiveKey(conversationId);
+                toggleModal();
+            } else {
+                setConversations([newConversation, ...conversations]);
+                setActiveKey(newConversation.id);
+                setTempConversation(newConversation);
+                toggleModal();
+            }
+
+        }
+
+        
+
+        
     }
 
     return (
