@@ -27,7 +27,7 @@ function MessageInput ({ tempConversation, setTempConversation, fullConversation
 
         let newConversation, message;
 
-        if (tempConversation.length != 0) {
+        if (tempConversation.length !== 0) {
             newConversation = await createConversation(tempConversation.participants[0].user.id, auth, updateAuth);
             if (message = await createMessage(newConversation.id, content, auth, updateAuth)) {
 

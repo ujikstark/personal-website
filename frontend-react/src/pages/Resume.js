@@ -35,7 +35,7 @@ function Resume() {
                             I can't create a new technology but I have an idea to apply the current techologies in right place
                         </div>      
                         <div className="d-block d-md-none">
-                            <img className="mr-1" height={20} width={20} src={img.tech.github} alt="github"/>
+                            <img className="me-1" height={20} width={20} src={img.tech.github} alt="github"/>
                             <a target="_blank" rel="noopener noreferrer" href="https://github.com/pbourdet">Github</a>
                         </div>
                     </Col>
@@ -51,8 +51,8 @@ function Resume() {
         <Container>
             <h3 className="text-start mt-5 mb-4">Projects</h3>
             <Row className="border p-5 d-flex align-items-center justify-content-around">
-                <Col md={3}>
-                <Image src={img.projects} width="100" height="100"></Image>
+                <Col md={3} className="m-1">
+                    <Image src={img.projects} width="100" height="100"></Image>
                 </Col>
                 <Col md={8} className="text-start">
                     <h4>Odinte - Digital Payment History</h4>

@@ -1,13 +1,12 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useEffect, useState } from "react";
-import { Button, Col, Nav, Row, Tab } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Col, Nav, Row, Tab } from "react-bootstrap";
 import { useAuth, useAuthUpdate } from "../../contexts/AuthContext";
-import { createMercureEventSource, getConversation, getConversations } from "../../requests/messaging";
+import { createMercureEventSource, getConversations } from "../../requests/messaging";
 import ConversationTab from "./ConversationTab";
 import PropTypes from 'prop-types';
 import ConversationDisplay from "./ConversationDisplay";
 import CreateConversationModal from "./CreateConversationalModal";
+import Loader from "../Loader";
 
 
 function ConversationTabs () {
@@ -26,11 +25,11 @@ function ConversationTabs () {
     const [loading, setLoading] = useState(true);
     let conversationsLocal = JSON.parse(localStorage.getItem('conversations'));
 
-
     useEffect(() => {
         const newEventSource = eventSource ?? createMercureEventSource('http://localhost:8000/api/conversations');
         newEventSource.onmessage = function (event) {
             const newConversation = JSON.parse(event.data);
+            console.log(newConversation);
             let isCurrentConversation = false;
                 if (conversationsLocal.hasOwnProperty(newConversation.id)) 
                     isCurrentConversation = true;
@@ -62,20 +61,25 @@ function ConversationTabs () {
         newAnotherEventSource.onmessage = function (event) {
             
             const message = JSON.parse(event.data);
+            console.log(message);
             let isRightConversation = false;
             for (let i = 0; i < conversations.length; i++) {
-                if (conversations[i].id == message.conversation.id) {
+                if (conversations[i].id === message.conversation.id) {
                     isRightConversation = true;
                 }
             }
+            console.log(isRightConversation);
 
             if (isRightConversation) {
                 
+                    conversationsLocal = JSON.parse(localStorage.getItem('conversations'));
                     conversationsLocal[message.conversation.id] = [];
+                    conversationsLocal[message.conversation.id] = message;
+                    console.log(conversationsLocal[message.conversation.id]);
+
                     setNewMessages(conversationsLocal);
                     
                     // for testing new notif purpose
-                    // conversationsLocal = JSON.parse(localStorage.getItem('conversations'));
                     // console.log(conversationsLocal);
                     // conversationsLocal[message.conversation.id].messages.push(message);
                     // let setConversation = conversationsLocal;
@@ -114,16 +118,12 @@ function ConversationTabs () {
             let newM = {};
 
             for (let i = 0; i < currentConversations.length; i++) {
-                newM[currentConversations[i].id] = {
-                    messages: [],
-                    count: 0,
-                };
+                newM[currentConversations[i].id] = [];
 
             }
 
-            if (conversationsLocal == null) {
-                localStorage.setItem('conversations', JSON.stringify(newM));
-            }
+            localStorage.setItem('conversations', JSON.stringify(newM));
+            
             
 
             setConversations(currentConversations);
@@ -137,6 +137,10 @@ function ConversationTabs () {
 
     }, [auth, updateAuth]);
 
+
+    if (loading) {
+        return <Loader/>
+    }
 
     if (conversations.length === 0) {
         return <div className="border-bottom p-2">

@@ -2,28 +2,36 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import NavigationBar from './components/navigationBar';
-import Home from './pages/Home';
 import AuthProvider from './contexts/AuthContext';
 import { Route, Routes } from 'react-router-dom';
-import Todo from './pages/Todo';
-import Profile from './pages/Profile';
-import ResetPassword from './pages/ResetPassword';
-import Messaging from './pages/Messaging';
-import Resume from './pages/Resume';
+import Loader from './components/Loader';
+
 
 function App() {
+
+    const Home = React.lazy(() => import('./pages/Home'));
+    const Profile = React.lazy(() => import('./pages/Profile'))
+    const Resume = React.lazy(() => import('./pages/Resume'));
+    const Todos = React.lazy(() => import('./pages/Todo'));
+    const ResetPassword = React.lazy(() => import('./pages/ResetPassword'));
+    const Messaging = React.lazy(() => import('./pages/Messaging'));
+
     return (
         <div className="App">
             <AuthProvider>
                 <NavigationBar/>
-                <Routes>
-                    <Route path="/" exact element={<Home/>}/>
-                    <Route path="/todo" element={<Todo/>}/>
-                    <Route path="/me" element={<Profile/>}/>
-                    <Route path="/reset-password/:token" element={<ResetPassword/>}/>
-                    <Route path="/resume" element={<Resume/>}/>
-                    <Route path="/messaging" element={<Messaging/>}></Route>
-                </Routes>
+                <React.Suspense fallback={<Loader/>}>
+                    
+                    <Routes>
+                        <Route path="/" index element={<Home/>}/>
+                        <Route path="/todo" element={<Todos/>}/>
+                        <Route path="/me" element={<Profile/>}/>
+                        <Route path="/reset-password/:token" element={<ResetPassword/>}/>
+                        <Route path="/resume" element={<Resume/>}/>
+                        <Route path="/messaging" element={<Messaging/>}/>
+                    </Routes>
+                </React.Suspense>
+                
             </AuthProvider>
         </div>
     );

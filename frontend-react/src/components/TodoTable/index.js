@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Button, Col, Collapse, Row } from "react-bootstrap";
 import TodoForm from "../TodoForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faPlus, faTimes} from '@fortawesome/free-solid-svg-icons';
 import TodoDetails from "./TodoDetails";
 import DeleteButton from "./DeleteButton";
 import DoneButton from "./DoneButton";
@@ -35,9 +35,9 @@ function TodoTable({ todos, setTodos }) {
                         <Row>
                             <DoneButton todo={todo} todos={todos} setTodos={setTodos}/>
                             <TodoDetails todo={todo}/>
-                            <Col className="d-flex justify-content-center align-items-center pl-0 pr-1" xs={3} sm={2}>
+                            <Col className="d-flex justify-content-center align-items-center ps-0 pe-1" xs={3} sm={2}>
                                 <div className="me-1">
-                                    <Button onClick={() => setTodoEdited(todoEdited === todo.id ? 0 : todo.id)} className="rounded-circle" size="sm">
+                                    <Button onClick={() => setTodoEdited(todoEdited === todo.id ? 0 : todo.id)} className="rounded-circle m-2" size="sm">
                                         <FontAwesomeIcon icon={faPen}/>
                                     </Button>
                                     <DeleteButton todo={todo} todos={todos} setTodos={setTodos}/>

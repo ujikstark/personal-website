@@ -43,7 +43,6 @@ class MessageCreationSubscriber implements EventSubscriberInterface
         if (!$message instanceof Message || Request::METHOD_POST !== $method) {
             return;
         }
-
         $user = $message->getSender()->getUser();
         $conversation = $message->getConversation();
 

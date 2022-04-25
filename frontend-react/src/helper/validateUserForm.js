@@ -1,4 +1,3 @@
-import React from 'react';
 import userFormText from './userFormText';
 
 export default function validateUserForm (values) {

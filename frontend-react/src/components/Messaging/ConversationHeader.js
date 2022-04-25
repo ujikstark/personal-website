@@ -15,7 +15,7 @@ function ConversationHeader ({ user, conversation, setShowMessages }) {
                 <FontAwesomeIcon icon={faArrowLeft}/>
             </Button>}
 
-            <span className="font-weight-bold ml-3">{otherParticipant.user.name}</span>
+            <span className="font-weight-bold ms-3">{otherParticipant.user.name}</span>
         </div>
     );
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from 'react-router-dom';
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Card, Container } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import UpdatePasswordModal from '../components/UpdatePasswordModal';
 

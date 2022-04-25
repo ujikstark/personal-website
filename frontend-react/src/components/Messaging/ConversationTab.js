@@ -12,7 +12,7 @@ function ConversationTab ( { user, conversation, tempConversation, activeKey}) {
         dateLastMessage = new Date(conversation.lastMessage.date).getTime();        
     }
     let display = 'flex';
-    if (tempConversation.id == conversation.id || dateLastMessage == null) {
+    if (tempConversation.id === conversation.id || dateLastMessage == null) {
         display = 'none';
     }
 
@@ -20,7 +20,7 @@ function ConversationTab ( { user, conversation, tempConversation, activeKey}) {
     let textColorLastMessage = 'text-secondary';
 
 
-    if (activeKey == conversation.id) {
+    if (activeKey === conversation.id) {
         textColorName = 'text-white';
         textColorLastMessage = 'text-white';
     } 

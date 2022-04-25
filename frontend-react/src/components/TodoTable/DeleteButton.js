@@ -22,7 +22,7 @@ export default function DeleteButton ({ todo, todos, setTodos }) {
 
     return (     
         <>
-        <Button onClick={handleShow} className="rounded-circle ms-3" size="sm" variant="danger"><FontAwesomeIcon icon={faTrash}/></Button>
+        <Button onClick={handleShow} className="rounded-circle m-2" size="sm" variant="danger"><FontAwesomeIcon icon={faTrash}/></Button>
         
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>

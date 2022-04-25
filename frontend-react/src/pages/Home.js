@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet';
 
 function Home() {
     return (
+        
         <Container>
             <Helmet><title>Homepage</title></Helmet>
             <h1 className="mt-3 mb-3">Homepage</h1>
@@ -13,7 +14,7 @@ function Home() {
                     <Card.Title className="mb-4">Welcome !</Card.Title>
                     <div className="h5 text-start fw-normal">
                         <div className="mb-3">
-                        This website has been developed for personal learning purposes on different front-end and back-end technologies. It is made of a React SPA and a Symfony API. The API documentation can be seen here. 
+                        This website has been developed for personal learning purposes on different front-end and back-end technologies. It is made of a React SPA and a Symfony API. The API documentation can be <a target="_blank" href="https://still-everglades-11344.herokuapp.com/api" rel="noopener noreferrer">Seen here</a>. 
                         </div>        
                         <div className="mb-3">
                         The API is consumed by a fully functional JWT authentication and small applications found in the navigation bar.

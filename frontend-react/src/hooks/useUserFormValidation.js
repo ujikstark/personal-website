@@ -10,7 +10,7 @@ export default function useUserFormValidation () {
         newPassword: '',
         confirmPassword: ''
     });
-    const [touched, setTouched] = useState({});
+    const [touched, setTouched] = useState({}); 
     const [errors, setErrors] = useState({});
 
     useEffect(() => {

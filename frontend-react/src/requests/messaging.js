@@ -39,7 +39,7 @@ export async function createMessage (conversationId, content, auth, updateAuth) 
 }
 
 export function createMercureEventSource (topic) {
-    const hub = new URL('http://localhost/.well-known/mercure', window.origin);
+    const hub = new URL('http://localhost/.well-known/mercure');
     hub.searchParams.append('topic', topic);
     return new EventSource(hub, {
         withCredentials: true

@@ -2,11 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FormattedMessage } from 'react-intl';
 
 import PropTypes from 'prop-types';
 import { useAuth, useAuthUpdate } from '../../contexts/AuthContext';
-import { createConversation } from '../../requests/messaging';
 import { getUser } from '../../requests/user';
 
 function CreateConversationModal ({ user, setShowMessages, conversations, setConversations, setActiveKey, setTempConversation }) {
@@ -39,7 +37,7 @@ function CreateConversationModal ({ user, setShowMessages, conversations, setCon
         const newUser = await getUser(userId, auth, updateAuth);
         setLoading(false);
 
-        if (newUser === null || user.id == userId) {
+        if (newUser === null || user.id === userId) {
             setInError(true);
             setUserFound(null);
 
@@ -72,7 +70,7 @@ function CreateConversationModal ({ user, setShowMessages, conversations, setCon
             let conversationId;
             conversations.forEach((value) => {
                 if (value.lastMessage)
-                    if (value.participants[0].user.id == userFound.id || value.participants[1].user.id == userFound.id) {
+                    if (value.participants[0].user.id === userFound.id || value.participants[1].user.id === userFound.id) {
                         isExist = true;
                         conversationId = value.id;
                     }

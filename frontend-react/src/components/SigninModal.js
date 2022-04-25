@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Form, Modal, Button, Alert, Spinner } from "react-bootstrap";
 import useUserFormValidation from "../hooks/useUserFormValidation";
-import { getMe, signinSubmit } from "../requests/user";
+import { signinSubmit } from "../requests/user";
 import UserFormInput from "./UserFormInput";
 import { useAuthUpdate } from "../contexts/AuthContext";
 import ResetPasswordEmailModal from "./ResetPasswordEmailModal";

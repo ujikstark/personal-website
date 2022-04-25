@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAuth, useAuthUpdate } from "../../contexts/AuthContext";
 import PropTypes from 'prop-types';
-import { createMercureEventSource, getConversation } from "../../requests/messaging";
+import { getConversation } from "../../requests/messaging";
 import MessageBubble from "./MessageBubble";
 import ConversationHeader from "./ConversationHeader";
 import MessageInput from "./MessageInput";
-import { Spinner } from "react-bootstrap";
 
 function ConversationDisplay ({ user, conversation, setShowMessages, conversations, setConversations, tempConversation, setTempConversation, newMessages, setNewMessages }) {
     const [loading, setLoading] = useState(true);
@@ -25,7 +24,8 @@ function ConversationDisplay ({ user, conversation, setShowMessages, conversatio
         if (!loading) {
             if (typeof newMessages !== "undefined") {
                 if (newMessages.hasOwnProperty(fullConversation.id)) {
-                    if (newMessages[fullConversation.id].length) {
+                    if (newMessages[fullConversation.id]) {
+                        console.log(newMessages);
                         let newFullConversation = fullConversation;
                         newFullConversation.messages = newFullConversation.messages.concat(newMessages[fullConversation.id]);
                         
@@ -48,7 +48,7 @@ function ConversationDisplay ({ user, conversation, setShowMessages, conversatio
 
         (async () => {
 
-            if (conversation.id != tempConversation.id) {
+            if (conversation.id !== tempConversation.id) {
                 
                 const fetchedConversation = await getConversation(conversation.id, auth, updateAuth);
 
